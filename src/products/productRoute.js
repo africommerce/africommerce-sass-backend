@@ -24,7 +24,7 @@ productRoute.route("/")
     })
 
     .post(validateProduct(), validate, createProduct)
-    .get(getAllProducts)
+    .get(authenticate.verifyUser, getAllProducts)
 
 productRoute.route('/:id')
     .put(updateProduct)

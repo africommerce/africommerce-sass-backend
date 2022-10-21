@@ -2,8 +2,26 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// //create the model
 
+// Rating Schema
+const ratingSchema = new Schema({
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "User ID required!"],
+  },
+  value: {
+    type: Number,
+    min: [1, "Rating is too low!"],
+    max: [5, "Rating is too high!"],
+    required: [true, 'Please provide rating value!']
+  },
+},
+{timestamps: true}
+);
+
+
+// Product Schema
 const ProductSchema = new Schema(
   {
     name: {
@@ -40,11 +58,7 @@ const ProductSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    rating: {
-      type: Number,
-      min: [1, "Rating is too low!"],
-      max: [5, "Rating is high!"],
-    },
+    rating: [ratingSchema],
     images: {
       type: String,
       required: [true, "Please provide an image link!"],

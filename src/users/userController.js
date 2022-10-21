@@ -31,30 +31,30 @@ async function createUser(req, res) {
     })
 };
 
-const loginUser = async (req, res) =>{
-    const { username, password } = req.body
-    const user = await validateUser(username, password)
+const loginUser = async (req, res) => {
+    const { identity, password } = req.body
+    const user = await validateUser(identity, password)
     if (!user) {
         return res.status(401).send("Invalid crendentials!")
     }
-    var token = authenticate.getToken({_id: user._id})
+    var token = authenticate.getToken({ _id: user._id })
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
-    res.json({success: true, token, status:'You are successfully logged in'})
+    res.json({ success: true, token, status: 'You are successfully logged in' })
 }
 
-const logoutUser = async(req, res) =>{
-    try{
+const logoutUser = async (req, res) => {
+    try {
         console.log(req.user)
         res.clearCookie('jwt')
         console.log('logout successful')
-        
+
         await req.user.save()
-        res.json({status:true, message:'logout successful'})
-    }catch(err){
+        res.json({ status: true, message: 'logout successful' })
+    } catch (err) {
         res.status(500).send(err)
     }
-  }
+}
 
 async function getAllUser(req, res) {
     const user = await userModel.find({});
