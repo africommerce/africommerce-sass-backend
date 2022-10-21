@@ -43,7 +43,7 @@ const ProductSchema = new Schema(
     rating: {
       type: Number,
       min: [1, "Rating is too low!"],
-      max: [5, "Rating is too high!"],
+      max: [5, "Rating is high!"],
     },
     images: {
       type: String,
