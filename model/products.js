@@ -26,11 +26,11 @@ const ProductSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "product name is required!"],
+      required: [true, "Product name is required!"],
     },
     brand_name: {
       type: String,
-      required: [true, "brand name is required!"],
+      required: [true, "Brand name is required!"],
     },
     product_details: {
       type: String,
