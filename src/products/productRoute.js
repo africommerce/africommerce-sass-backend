@@ -12,8 +12,10 @@ const {
     getProduct,
     getAllProducts,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    TopProducts
 } = require("./productController")
+
 const { validateProduct, validate } = require("../../middleware/productValidation")
 
 productRoute.route("/")
@@ -25,6 +27,12 @@ productRoute.route("/")
 
     .post(validateProduct(), validate, createProduct)
     .get(authenticate.verifyUser, getAllProducts)
+    
+
+productRoute
+    .route("/top-Rated-Product")
+    .get(TopProducts);
+
 
 productRoute.route('/:id')
     .put(updateProduct)
