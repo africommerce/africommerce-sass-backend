@@ -58,7 +58,7 @@ const ProductSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    rating: [ratingSchema],
+    ratings: [ratingSchema],
     images: {
       type: String,
       required: [true, "Please provide an image link!"],
