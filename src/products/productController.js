@@ -81,10 +81,59 @@ const deleteProduct = async (req, res) => {
 
 }
 
+const TopProducts = async(req, res, next) =>{
+    const products = await Product.aggregate([
+      {
+        // STAGE 1
+        $addFields: {
+          ratingSum: {
+            $reduce: {
+              input: "$ratings",
+              initialValue: 0,
+              in: {
+                $add: ["$$value", "$$this.val"],
+              },
+            },
+          },
+        },
+      },
+
+      {//STAGE 2
+        $addFields: {
+          rating: {
+            $cond: [
+              { $eq: [{ $size: "$ratings" }, 0] },
+              0,
+              { $divide: ["$ratingSum", { $size: "$ratings" }] },
+            ],
+          },
+        },
+      },
+
+      {//STAGE 3
+        $sort: { rating: -1 },
+      },
+
+      {// STAGE 4
+        $project: {
+          ratings: 0,__v: 0,ratingSum: 0,
+        },
+      },
+
+      { $limit: 5 },
+    ]);
+
+    return res.status(200).json({
+      status: true,
+      products,
+    });
+}
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    TopProducts
 }
