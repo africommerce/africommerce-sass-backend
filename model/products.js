@@ -36,7 +36,8 @@ const ProductSchema = new Schema(
       type: String,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'category',
       required: [true, "please provide product category!"],
     },
     quantity: {
@@ -57,6 +58,7 @@ const ProductSchema = new Schema(
     owner_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: [true, 'Product owner Id required!']
     },
     ratings: [ratingSchema],
     images: {
