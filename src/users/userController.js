@@ -103,6 +103,18 @@ async function deleteUserById(req, res) {
 }
 
 
+async function getSellers(req, res, next){
+    const sellers = await userModel.aggregate([
+        {
+            $match: {
+                usertype: "business"
+            }
+        }
+    ])
+    res.status(200).json({status:true, sellers:sellers})
+}
+
+
 module.exports = {
     createUser,
     loginUser,
@@ -110,5 +122,6 @@ module.exports = {
     updateUserById,
     deleteUserById,
     getAllUser,
-    getOneUser
+    getOneUser,
+    getSellers
 }
