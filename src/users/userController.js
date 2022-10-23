@@ -114,6 +114,16 @@ async function getSellers(req, res, next){
     res.status(200).json({status:true, sellers:sellers})
 }
 
+async function getSellerById(req, res){
+    const sellerId = req.params.id
+    const seller = await userModel.findOne({_id: sellerId, usertype: "business"})
+
+    res.status(200).json({
+        status: true,
+        seller: seller
+    })
+}
+
 
 module.exports = {
     createUser,
@@ -123,5 +133,6 @@ module.exports = {
     deleteUserById,
     getAllUser,
     getOneUser,
-    getSellers
+    getSellers,
+    getSellerById
 }
