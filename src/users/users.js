@@ -9,7 +9,8 @@ const {
   getAllUser,
   getOneUser,
   loginUser,
-  logoutUser
+  logoutUser,
+  getSellers
 } = require("./userController")
 const { validateUser, validate } = require("../../middleware/userValidation")
 
@@ -31,7 +32,9 @@ router
   .route('/logout')
   .get(authenticate.verifyUser, logoutUser)
 
-
+router
+  .route('/sellers')
+  .get(getSellers)
 router
   .route('/:id')
   .put(updateUserById)
