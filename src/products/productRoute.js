@@ -13,7 +13,9 @@ const {
     getAllProducts,
     updateProduct,
     deleteProduct,
-    TopProducts
+    TopProducts,
+    productById,
+    getRelatedProducts,
 } = require("./productController")
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
@@ -37,5 +39,10 @@ productRoute
 productRoute.route('/:id')
     .put(updateProduct)
     .get(getProduct)
+
+productRoute.route("/related/:id")
+    .get(getRelatedProducts)
+
+productRoute.param("id", productById);
 
 module.exports = productRoute;
