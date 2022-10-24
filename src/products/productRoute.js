@@ -13,7 +13,8 @@ const {
     getAllProducts,
     updateProduct,
     deleteProduct,
-    TopProducts
+    TopProducts,
+    latestProduct
 } = require("./productController")
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
@@ -30,8 +31,12 @@ productRoute.route("/")
     
 
 productRoute
-    .route("/top-Rated-Product")
+    .route("/top-rated-product")
     .get(TopProducts);
+productRoute
+    .route("/latest-products")
+    .get(latestProduct)
+
 
 
 productRoute.route('/:id')

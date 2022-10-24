@@ -9,7 +9,9 @@ const {
   getAllUser,
   getOneUser,
   loginUser,
-  logoutUser
+  logoutUser,
+  getSellers,
+  getSellerById
 } = require("./userController")
 const { validateUser, validate } = require("../../middleware/userValidation")
 
@@ -30,6 +32,15 @@ router
   router 
   .route('/logout')
   .get(authenticate.verifyUser, logoutUser)
+
+router
+  .route('/sellers')
+  .get(getSellers)
+
+
+router
+  .route('/sellers/:id')
+  .get(getSellerById)
 
 
 router

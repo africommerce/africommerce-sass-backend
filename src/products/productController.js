@@ -81,6 +81,7 @@ const deleteProduct = async (req, res) => {
 
 }
 
+
 const TopProducts = async(req, res, next) =>{
     const products = await Product.aggregate([
       {
@@ -129,11 +130,24 @@ const TopProducts = async(req, res, next) =>{
     });
 }
 
+
+const latestProduct = async(req, res, next) => {
+  /*SORT PRODUCTS BY DATE */
+  const latestProducts = await Product.find({})
+                                  .sort({ createdAt: "desc" })
+                                  .limit(10);
+  res.status(200).json({ status: true, latestProducts: latestProducts });
+    
+}
+
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProduct,
     updateProduct,
     deleteProduct,
-    TopProducts
+    TopProducts,
+    latestProduct,
+    
 }
