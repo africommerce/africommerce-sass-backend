@@ -48,7 +48,8 @@ exports.verifyAdmin = async (req, res, next) => {
 exports.verifyUserType = async (req, res, next) => {
     try {
         const user = await userModel.findOne({ _id: req.user._id })
-        if (user.usertype == 'user') {
+        console.log(user)
+        if (user.usertype == 'business') {
             next()
         }
     } catch (err) {

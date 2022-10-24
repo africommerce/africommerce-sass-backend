@@ -26,9 +26,9 @@ productRoute.route("/")
         next()
     })
 
-    .post(validateProduct(), validate, createProduct)
-    .get(authenticate.verifyUser, getAllProducts)
-    
+    .post(authenticate.verifyUser, authenticate.verifyUserType, validateProduct(), validate, createProduct)
+    .get(getAllProducts)
+
 
 productRoute
     .route("/top-rated-product")

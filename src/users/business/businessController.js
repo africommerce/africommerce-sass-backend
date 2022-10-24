@@ -10,7 +10,6 @@ async function registerBusinessUser(req, res) {
     }
     const businessUser = await businessModel.create({ business_name, address, logo, owner: userId })
     const updateUser = await userModel.findByIdAndUpdate(userId, { usertype: "business" }, { new: true })
-    console.log(updateUser)
     res.send(businessUser)
 
 }
