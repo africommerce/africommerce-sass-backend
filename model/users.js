@@ -12,7 +12,8 @@ const UserSchema = new Schema({
     password: {
         type: String,
         default: '',
-        required: true
+        required: true,
+        select: false
     },
     firstname: {
         type: String,
@@ -50,6 +51,47 @@ const UserSchema = new Schema({
 })
 
 
-const users = mongoose.model("User", UserSchema) //creating the model
+const businessUser = new mongoose.Schema({
+    business_name: {
+        type: String,
+        required: [true, "You must provide a buisness name"],
+        // unique: [true, "This name already exist!"],
+    },
+    address: [
+        {
+            country: {
+                type: String,
+                required: true
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            street_address: {
+                type: String,
+                required: true
+            }
+        },
+    ],
+    logo: {
+        type: String,
+        required: [true, "You must provide a logo for your brand!"]
+    },
+    owner: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 
-module.exports = users //exporting the created model
+},
+    { timestamps: true }
+)
+
+
+
+
+const businessModel = mongoose.model("Business", businessUser)
+const userModel = mongoose.model("User", UserSchema)
+
+module.exports = { userModel, businessModel }

@@ -1,4 +1,4 @@
-const userModel = require("../../model/users")
+const { userModel } = require("../../model/users")
 var passport = require("passport")
 const { body, validationResult } = require("express-validator")
 const { hashPassword, validateUser } = require("../../config/helper")
