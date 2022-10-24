@@ -49,6 +49,12 @@ const UserSchema = new Schema({
     timestamps: true
 })
 
+// Remove password from response
+UserSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    delete returnedObject.password
+  },
+})
 
 const users = mongoose.model("User", UserSchema) //creating the model
 
