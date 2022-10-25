@@ -1,5 +1,6 @@
 const Product = require('../../model/products')
 const Category = require("../../model/categories")
+const { userModel } = require("../../model/users");
 
 
 const createProduct = async (req, res, next) => {
@@ -89,7 +90,7 @@ const TopProducts = async (req, res, next) => {
             input: "$ratings",
             initialValue: 0,
             in: {
-              $add: ["$$value", "$$this.val"],
+              $add: ["$$value", "$$this.value"],
             },
           },
         },
@@ -138,6 +139,78 @@ const latestProduct = async (req, res, next) => {
 }
 
 
+const bestSelling = async(req, res, next) => {
+
+  /* SORT PRODUCT BY MOST SOLD */
+  const bestSellingProduct = await Product.find({}).sort({amount_sold: "desc"})
+
+  res.status(200).json({
+    status: true,
+    bestSellingProducts: bestSellingProduct
+  })
+}
+
+const bestSeller = async (req, res, next) => {
+  const bestSeller = await userModel.aggregate([
+    {
+      // STAGE 1
+      $match: {
+        usertype: "business",
+      },
+    },
+    {
+      // STAGE 2
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "owner_id",
+        as: "products",
+      },
+    },
+    {
+      // STAGE 3
+      $addFields: {
+        sellerProductsTotal: {
+          $reduce: {
+            input: "$products",
+            initialValue: 0,
+            in: {
+              $add: ["$$value", "$$this.amount_sold"],
+            },
+          },
+        },
+      },
+    },
+    {
+      //STAGE 4
+      $addFields: {
+        sellerProductsTotalAvg: {
+          $cond: [
+            { $eq: [{ $size: "$products" }, 0] },
+            0,
+            { $divide: ["$sellerProductsTotal", { $size: "$products" }] },
+          ],
+        },
+      },
+    },
+    {
+      //STAGE 5
+      $sort: { sellerProductsTotalAvg: -1 },
+    },
+    {
+      // STAGE 6
+      $project: {
+        products: 0,
+        __v: 0,
+        sellerProductsTotalAvg: 0,
+        sellerProductsTotal: 0
+      },
+    },
+  ]);
+  
+  res.status(200).json({status: true, bestSeller: bestSeller})
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -146,5 +219,7 @@ module.exports = {
   deleteProduct,
   TopProducts,
   latestProduct,
+  bestSelling,
+  bestSeller
 
 }
