@@ -2,7 +2,7 @@ const argon2 = require("argon2")
 const jwt = require('jsonwebtoken');
 const config = require("./config");
 
-const userModel = require("../model/users")
+const { userModel } = require("../model/users")
 
 async function hashPassword(password) {
     return await argon2.hash(password);
@@ -14,7 +14,7 @@ async function verifyPassword(plainPassword, hashedPassword) {
 
 
 async function validateUser(idenity, password) {
-    let user = await userModel.findOne({ username: idenity })
+    let user = await userModel.findOne({ username: idenity }).select('+password')
     if (!user) {
         user = await userModel.findOne({ email: idenity })
     }

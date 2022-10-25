@@ -14,8 +14,7 @@ const {
     updateProduct,
     deleteProduct,
     TopProducts,
-    productById,
-    getRelatedProducts,
+    latestProduct
 } = require("./productController")
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
@@ -27,13 +26,16 @@ productRoute.route("/")
         next()
     })
 
-    .post(validateProduct(), validate, createProduct)
-    .get(authenticate.verifyUser, getAllProducts)
-    
+    .post(authenticate.verifyUser, authenticate.verifyUserType, validateProduct(), validate, createProduct)
+    .get(getAllProducts)
+
 
 productRoute
-    .route("/top-Rated-Product")
+    .route("/top-rated-product")
     .get(TopProducts);
+productRoute
+    .route("/latest-products")
+    .get(latestProduct)
 
 
 productRoute.route('/:id')
