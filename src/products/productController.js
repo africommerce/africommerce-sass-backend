@@ -138,36 +138,36 @@ const latestProduct = async (req, res, next) => {
 
 
 const productById = async (req, res, next, id) => {
-    await Product.findById(id)
-        .populate('category')
-        .exec((err, product) => {
-            if (err || !product) {
-                return res.status(400).json({
-                    error: 'Product not found'
-                });
-            }
-            req.product = product;
-            next();
-        });
-  };
-  
-  
-  const getRelatedProducts = async (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  
-    await Product.find({ _id: { $ne: req.product }, category: req.product.category })
-        .limit(limit)
-        .populate('category', '_id name')
-        .exec((err, products) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Products not found'
-                });
-            }
-            res.json(products);
-        });
-  };
-  
+  await Product.findById(id)
+      .populate('category')
+      .exec((err, product) => {
+          if (err || !product) {
+              return res.status(400).json({
+                  error: 'Product not found'
+              });
+          }
+          req.product = product;
+          next();
+      });
+};
+
+
+const getRelatedProducts = async (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 10;
+
+  await Product.find({ _id: { $ne: req.product }, category: req.product.category })
+      .limit(limit)
+      .populate('category', '_id name')
+      .exec((err, products) => {
+          if (err) {
+              return res.status(400).json({
+                  error: 'Products not found'
+              });
+          }
+          res.json({"relatedProducts": products});
+      });
+};
+
 
 module.exports = {
     createProduct,
@@ -176,8 +176,8 @@ module.exports = {
     updateProduct,
     deleteProduct,
     TopProducts,
-    productById,
     latestProduct,
+    productById,
     getRelatedProducts
 
 }
