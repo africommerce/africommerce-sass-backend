@@ -12,7 +12,7 @@ const createProduct = async (req, res, next) => {
         quantity: req.body.quantity,
         price: req.body.price,
         desc: req.body.desc,
-        owner_id: req.user.id,
+        owner_id: req.user._id,
         rating: req.body.rating,
         images: req.body.images,
     })
@@ -128,6 +128,8 @@ const TopProducts = async(req, res, next) =>{
       products,
     });
 }
+
+
 
 module.exports = {
     createProduct,

@@ -1,7 +1,8 @@
 const express = require('express');
 const productRoute = require("../src/products/productRoute");
 const userRoute = require("../src/users/users")
-const categoryRoute = require("../src/categories/categoryRoute")
+const categoryRoute = require("../src/categories/categoryRoute");
+const wishlistRoute = require("../src/wishlist/wishListRoute")
 
 const passport = require('passport')
 
@@ -17,6 +18,7 @@ rootRouter.get('/', function (req, res, next) {
 rootRouter.use('/users', userRoute);
 rootRouter.use('/products', productRoute)
 rootRouter.use('/category', categoryRoute)
+rootRouter.use('/wishlist', wishlistRoute)
 
 
 

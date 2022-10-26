@@ -6,7 +6,6 @@ const authenticate = require('../../middleware/authenticate')
 
 // productRoute.use(passport.authenticate('jwt', { session: false }))
 
-
 const {
     createProduct,
     getProduct,
