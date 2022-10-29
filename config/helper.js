@@ -16,7 +16,7 @@ async function verifyPassword(plainPassword, hashedPassword) {
 async function validateUser(idenity, password) {
     let user = await userModel.findOne({ username: idenity }).select('+password')
     if (!user) {
-        user = await userModel.findOne({ email: idenity })
+        user = await userModel.findOne({ email: idenity }).select('+password')
     }
     if (!user) {
         return false
