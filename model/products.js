@@ -44,6 +44,10 @@ const ProductSchema = new Schema(
       type: Number,
       required: [true, "product quantity required!"],
     },
+    amount_sold:{
+      type: Number,
+      default: 0
+    },
     price: {
       type: Number,
       required: [true, "product price is required!"],

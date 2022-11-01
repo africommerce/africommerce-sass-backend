@@ -14,7 +14,9 @@ const {
     updateProduct,
     deleteProduct,
     TopProducts,
-    latestProduct
+    latestProduct,
+    bestSelling,
+    bestSeller
 } = require("./productController")
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
@@ -36,6 +38,13 @@ productRoute
 productRoute
     .route("/latest-products")
     .get(latestProduct)
+productRoute
+    .route("/best-selling")
+    .get(bestSelling)
+
+productRoute
+    .route("/best-sellers")
+    .get(bestSeller)
 
 
 
