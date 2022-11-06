@@ -2,7 +2,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-//modelling the leader schema
+//modelling the User schema
 const UserSchema = new Schema({
     username: {
         type: String,

@@ -2,23 +2,24 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-// Rating Schema
-const ratingSchema = new Schema({
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "User ID required!"],
-  },
-  value: {
+const reviewSchema = new Schema({
+  rating: {
     type: Number,
-    min: [1, "Rating is too low!"],
-    max: [5, "Rating is too high!"],
+    min: [1],
+    max: [5],
     required: [true, 'Please provide rating value!']
   },
-},
-{timestamps: true}
-);
+  comment: {
+      type: String,
+      required: true
+  },
+  author:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+  }
+},{
+  timestamps: true
+})
 
 
 // Product Schema
@@ -64,7 +65,7 @@ const ProductSchema = new Schema(
       ref: "User",
       required: [true, 'Product owner Id required!']
     },
-    ratings: [ratingSchema],
+    reviews: [reviewSchema],
     images: {
       type: String,
       required: [true, "Please provide an image link!"],

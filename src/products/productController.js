@@ -211,7 +211,6 @@ const bestSeller = async (req, res, next) => {
   res.status(200).json({status: true, bestSeller: bestSeller})
 }
 
-
 const getProductBySeller = async (req, res, next) => {
   try{
     const { id } = req.params;
