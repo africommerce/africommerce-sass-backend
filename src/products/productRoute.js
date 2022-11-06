@@ -20,6 +20,8 @@ const {
     getProductBySeller
 } = require("./productController")
 
+const {CreateReview, getReviews, updateReview, deleteReview} = require('./ReviewController')
+
 const { validateProduct, validate } = require("../../middleware/productValidation")
 
 productRoute.route("/")
@@ -55,5 +57,14 @@ productRoute
 productRoute.route('/:id')
     .put(updateProduct)
     .get(getProduct)
+
+productRoute.route('/:id/reviews')
+    .get(getReviews)
+    .get(authenticate.verifyUser, CreateReview)
+
+productRoute.route('/:id/reviews/:reviewID')
+    .put(authenticate.verifyUser, authenticate.verifyAuthor,updateReview)
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
+
 
 module.exports = productRoute;
