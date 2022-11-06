@@ -19,6 +19,8 @@ const {
     bestSeller
 } = require("./productController")
 
+const {CreateReview, getReviews, updateReview, deleteReview} = require('./ReviewController')
+
 const { validateProduct, validate } = require("../../middleware/productValidation")
 
 productRoute.route("/")
@@ -51,5 +53,14 @@ productRoute
 productRoute.route('/:id')
     .put(updateProduct)
     .get(getProduct)
+
+productRoute.route('/:id/reviews')
+    .get(getReviews)
+    .get(CreateReview)
+
+productRoute.route('/:id/reviews/:reviewID')
+    .put(updateReview)
+    .delete(deleteReview)
+
 
 module.exports = productRoute;
