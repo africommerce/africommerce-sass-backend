@@ -211,6 +211,22 @@ const bestSeller = async (req, res, next) => {
   res.status(200).json({status: true, bestSeller: bestSeller})
 }
 
+const getProductBySeller = async (req, res, next) => {
+  try{
+    const { id } = req.params;
+
+    const products = await Product.find({ owner_id: id });
+    res.status(200).json({
+      status: true,
+      products: products
+    })
+  }
+  catch(err){
+    res.status(400).json({status: false, error: err})
+
+  }
+
+}
 
 module.exports = {
   createProduct,
@@ -221,6 +237,7 @@ module.exports = {
   TopProducts,
   latestProduct,
   bestSelling,
-  bestSeller
+  bestSeller,
+  getProductBySeller
 
 }
