@@ -16,7 +16,8 @@ const {
     TopProducts,
     latestProduct,
     bestSelling,
-    bestSeller
+    bestSeller,
+    getProductBySeller
 } = require("./productController")
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
@@ -46,6 +47,9 @@ productRoute
     .route("/best-sellers")
     .get(bestSeller)
 
+productRoute
+    .route('/seller/:id')
+    .get(getProductBySeller)
 
 
 productRoute.route('/:id')
