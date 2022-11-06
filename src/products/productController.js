@@ -211,6 +211,7 @@ const bestSeller = async (req, res, next) => {
   res.status(200).json({status: true, bestSeller: bestSeller})
 }
 
+
 module.exports = {
   createProduct,
   getAllProducts,

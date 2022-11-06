@@ -56,11 +56,11 @@ productRoute.route('/:id')
 
 productRoute.route('/:id/reviews')
     .get(getReviews)
-    .get(CreateReview)
+    .get(authenticate.verifyUser, CreateReview)
 
 productRoute.route('/:id/reviews/:reviewID')
-    .put(updateReview)
-    .delete(deleteReview)
+    .put(authenticate.verifyUser, authenticate.verifyAuthor,updateReview)
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 
 
 module.exports = productRoute;
