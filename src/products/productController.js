@@ -1,6 +1,7 @@
 const Product = require('../../model/products')
 const Category = require("../../model/categories")
 const { userModel } = require("../../model/users");
+const helper = require('./utils/helper')
 
 
 const createProduct = async (req, res, next) => {
@@ -42,9 +43,28 @@ const createProduct = async (req, res, next) => {
 }
 
 const getAllProducts = async (req, res) => {
-  const products = await Product.find()
-  res.status(200).json({ nbHits: products.length, products })
+  try{
+    
+    // NAME OF CATEGORY FIELD: VALUE
+    // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
+    const category = req.query.category_name
+      ? await Category.findOne({ category_name: req.query.category_name })
+      : undefined;
+    const query = helper.buildQuery(req.query, category);
+    const paginate = helper.pages(req.query.page);
+
+
+    const products = await Product
+                            .find(query)
+                            .skip(paginate.skip)
+                            .limit(paginate.limit);
+
+    return res.status(200).json({ nbHits: products.length, products:products });
+  }
+  catch(err){
+    return res.status(400).json({status: false, error: err})
+  }
 }
 
 
@@ -257,6 +277,6 @@ module.exports = {
   latestProduct,
   bestSelling,
   bestSeller,
-  getProductBySeller
+  getProductBySeller,
 
 }
