@@ -50,10 +50,29 @@ const getAllProducts = async (req, res) => {
 
 
 const getProduct = async (req, res) => {
-  const { id: productID } = req.params// destructured the req.params.id and passed it to var
-  const product = await Product.findOne({ _id: productID })
-  res.status(200).json({ product })
+  try{
+    const { id: productID } = req.params; // destructured the req.params.id and passed it to var
+    const product = await Product.findOne({ _id: productID });
 
+    const productCategory = product.category;
+    const relatedProducts = await Product
+                                    .find({category: productCategory, _id: { $ne: productID }})
+                                    .limit(10)
+
+    return res.status(200).json({
+                    status: true,
+                    product: product,
+                    relatedProducts: relatedProducts,
+                  });
+
+  }
+  catch(err){
+    return res.status(400).json({
+      status: false,
+      error: err
+    })
+
+  }
 }
 
 const updateProduct = async (req, res) => {

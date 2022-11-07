@@ -1,17 +1,23 @@
 const Category = require('../../model/categories')
+const random = require('./utils/random')
 
 exports.createCategory = async(req, res, next) => {
-    const newCategory = new Category({
-        category_name:req.body.name
+    try{
+    const newCategory = req.body.name
+
+    const savedCategory = await Category.create({
+        category_name: newCategory
     })
 
-    const savedCategory = await newCategory.save()
-
-    res.status(201).json({
+    return res.status(201).json({
         status: true,
         category: savedCategory
     })
 
+    }
+    catch(err){
+        return res.status(400).json({status: false, error: err})
+    }
 }
 
 exports.getAllCategories = async(req, res, next) =>{
@@ -35,4 +41,25 @@ exports.getAllCategories = async(req, res, next) =>{
             err
         })
     }
+}
+
+exports.fiveRandomCategories = async(req, res, next) => {
+    try{
+        const limit = 5;
+        const categoryObj = await Category.find({});
+        const page = random.randomPages(categoryObj, limit);
+        const skip = (page - 1) * limit;
+
+        const randomCategories = await Category
+                                            .find({})
+                                            .skip(skip)
+                                            .limit(limit);
+        
+        return res.status(200).json({status: true, categories: randomCategories})
+    }
+    catch(err){
+        return res.status(400).json({status: false, error: err})
+    }
+                                    
+
 }
