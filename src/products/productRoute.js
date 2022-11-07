@@ -16,8 +16,7 @@ const {
     TopProducts,
     latestProduct,
     bestSelling,
-    bestSeller,
-    getProductBySeller
+    bestSeller
 } = require("./productController")
 
 const {CreateReview, getReviews, updateReview, deleteReview} = require('./ReviewController')
@@ -49,9 +48,6 @@ productRoute
     .route("/best-sellers")
     .get(bestSeller)
 
-productRoute
-    .route('/seller/:id')
-    .get(getProductBySeller)
 
 
 productRoute.route('/:id')
