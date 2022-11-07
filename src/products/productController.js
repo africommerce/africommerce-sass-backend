@@ -44,7 +44,7 @@ const createProduct = async (req, res, next) => {
 
 const getAllProducts = async (req, res) => {
   try{
-    
+
     // NAME OF CATEGORY FIELD: VALUE
     // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
@@ -53,7 +53,6 @@ const getAllProducts = async (req, res) => {
       : undefined;
     const query = helper.buildQuery(req.query, category);
     const paginate = helper.pages(req.query.page);
-
 
     const products = await Product
                             .find(query)
@@ -250,23 +249,6 @@ const bestSeller = async (req, res, next) => {
   res.status(200).json({status: true, bestSeller: bestSeller})
 }
 
-const getProductBySeller = async (req, res, next) => {
-  try{
-    const { id } = req.params;
-
-    const products = await Product.find({ owner_id: id });
-    res.status(200).json({
-      status: true,
-      products: products
-    })
-  }
-  catch(err){
-    res.status(400).json({status: false, error: err})
-
-  }
-
-}
-
 module.exports = {
   createProduct,
   getAllProducts,
@@ -276,7 +258,6 @@ module.exports = {
   TopProducts,
   latestProduct,
   bestSelling,
-  bestSeller,
-  getProductBySeller,
+  bestSeller
 
 }
