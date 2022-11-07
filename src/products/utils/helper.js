@@ -13,5 +13,6 @@ exports.buildQuery = (queryObj, categoryObj) => {
       query.category = category._id;
     }
   }
+  query = {...query, ...queryObj}
   return query
 }
