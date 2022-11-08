@@ -43,6 +43,11 @@ const createProduct = async (req, res, next) => {
 }
 
 const getAllProducts = async (req, res) => {
+  let category = req.query.category_name
+  if (!category) {
+    const products = await Product.find().limit(5)
+    return res.status(200).json({ nbHits: products.length, products : products})
+  }
   try{
 
     // NAME OF CATEGORY FIELD: VALUE
