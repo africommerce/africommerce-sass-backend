@@ -25,6 +25,7 @@ async function createUser(req, res) {
     const hashedPassword = await hashPassword(newUser.password)
     newUser.password = hashedPassword
     const user = await userModel.create(newUser)
+    delete user.password
     res.json({
         msg: "Registration successful!",
         data: user
@@ -75,9 +76,9 @@ async function getOneUser(req, res) {
 
 async function updateUserById(req, res) {
     const id = req.params.id;
-    const bodyToUpdate = req.body;
+    const { firstname, lastname, email, username } = req.body;
 
-    let user = await userModel.findByIdAndUpdate(id, bodyToUpdate, { new: true });
+    let user = await userModel.findByIdAndUpdate(id, { firstname, lastname, email, username }, { new: true });
 
     if (!user) {
         return res.status(404).send("User does not exit")
@@ -103,7 +104,7 @@ async function deleteUserById(req, res) {
 }
 
 
-async function getSellers(req, res, next){
+async function getSellers(req, res, next) {
     const sellers = await userModel.aggregate([
         {
             $match: {
@@ -111,12 +112,12 @@ async function getSellers(req, res, next){
             }
         }
     ])
-    res.status(200).json({status:true, sellers:sellers})
+    res.status(200).json({ status: true, sellers: sellers })
 }
 
-async function getSellerById(req, res){
+async function getSellerById(req, res) {
     const sellerId = req.params.id
-    const seller = await userModel.findOne({_id: sellerId, usertype: "business"})
+    const seller = await userModel.findOne({ _id: sellerId, usertype: "business" })
 
     res.status(200).json({
         status: true,

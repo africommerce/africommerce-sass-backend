@@ -4,7 +4,7 @@ const { userModel } = require("../../model/users");
 const helper = require('./utils/helper')
 
 
-const createProduct = async (req, res, next) => {
+const createProduct = async (req, res) => {
   /**
    * create new product with required parameters
    */
@@ -15,10 +15,10 @@ const createProduct = async (req, res, next) => {
     quantity: req.body.quantity,
     price: req.body.price,
     desc: req.body.desc,
-    owner_id: req.user.id,
-    rating: req.body.rating,
     images: req.body.images,
+    owner_id: req.user.id
   })
+
 
   if (req.body.product_details) {
     productToSave.product_details = req.body.product_details
@@ -34,16 +34,13 @@ const createProduct = async (req, res, next) => {
   }
   productToSave.category = category.id
 
-  const savedProduct = await productToSave.save()
 
-  res.status(201).json({
-    status: true,
-    product: savedProduct,
-  })
+  const savedProduct = await productToSave.save()
+  res.status(201).send(savedProduct)
 }
 
 const getAllProducts = async (req, res) => {
-  try{
+  try {
 
     // NAME OF CATEGORY FIELD: VALUE
     // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
@@ -55,43 +52,34 @@ const getAllProducts = async (req, res) => {
     const paginate = helper.pages(req.query.page);
 
     const products = await Product
-                            .find(query)
-                            .skip(paginate.skip)
-                            .limit(paginate.limit);
+      .find(query)
+      .skip(paginate.skip)
+      .limit(paginate.limit);
 
-    return res.status(200).json({ nbHits: products.length, products:products });
+    return res.status(200).json({ nbHits: products.length, products: products });
   }
-  catch(err){
-    return res.status(400).json({status: false, error: err})
+  catch (err) {
+    return res.status(400).json({ status: false, error: err })
   }
 }
 
 
 
 const getProduct = async (req, res) => {
-  try{
-    const { id: productID } = req.params; // destructured the req.params.id and passed it to var
-    const product = await Product.findOne({ _id: productID });
+  const { id: productID } = req.params;
+  const product = await Product.findOne({ id: productID });
 
-    const productCategory = product.category;
-    const relatedProducts = await Product
-                                    .find({category: productCategory, _id: { $ne: productID }})
-                                    .limit(10)
+  const productCategory = product.category;
+  const relatedProducts = await Product
+    .find({ category: productCategory, _id: { $ne: productID } })
+    .limit(10)
 
-    return res.status(200).json({
-                    status: true,
-                    product: product,
-                    relatedProducts: relatedProducts,
-                  });
+  res.status(200).json({
+    status: true,
+    product: product,
+    relatedProducts: relatedProducts,
+  });
 
-  }
-  catch(err){
-    return res.status(400).json({
-      status: false,
-      error: err
-    })
-
-  }
 }
 
 const updateProduct = async (req, res) => {
@@ -118,7 +106,7 @@ const deleteProduct = async (req, res) => {
 }
 
 
-const TopProducts = async (req, res, next) => {
+const TopProducts = async (req, res) => {
   const products = await Product.aggregate([
     {
       // STAGE 1
@@ -167,7 +155,7 @@ const TopProducts = async (req, res, next) => {
 }
 
 
-const latestProduct = async (req, res, next) => {
+const latestProduct = async (req, res) => {
   /*SORT PRODUCTS BY DATE */
   const latestProducts = await Product.find({})
     .sort({ createdAt: "desc" })
@@ -177,10 +165,10 @@ const latestProduct = async (req, res, next) => {
 }
 
 
-const bestSelling = async(req, res, next) => {
+const bestSelling = async (req, res) => {
 
   /* SORT PRODUCT BY MOST SOLD */
-  const bestSellingProduct = await Product.find({}).sort({amount_sold: "desc"})
+  const bestSellingProduct = await Product.find({}).sort({ amount_sold: "desc" })
 
   res.status(200).json({
     status: true,
@@ -188,7 +176,7 @@ const bestSelling = async(req, res, next) => {
   })
 }
 
-const bestSeller = async (req, res, next) => {
+const bestSeller = async (req, res) => {
   const bestSeller = await userModel.aggregate([
     {
       // STAGE 1
@@ -245,8 +233,8 @@ const bestSeller = async (req, res, next) => {
       },
     },
   ]);
-  
-  res.status(200).json({status: true, bestSeller: bestSeller})
+
+  res.status(200).json({ status: true, bestSeller: bestSeller })
 }
 
 module.exports = {
