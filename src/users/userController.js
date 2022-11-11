@@ -1,6 +1,5 @@
 const { userModel } = require("../../model/users")
 var passport = require("passport")
-const { body, validationResult } = require("express-validator")
 const { hashPassword, validateUser } = require("../../config/helper")
 
 const authenticate = require('../../middleware/authenticate')
@@ -25,10 +24,10 @@ async function createUser(req, res) {
     const hashedPassword = await hashPassword(newUser.password)
     newUser.password = hashedPassword
     const user = await userModel.create(newUser)
-    delete user.password
+    const userToReturn = await userModel.findById(user.id)
     res.json({
         msg: "Registration successful!",
-        data: user
+        data: userToReturn
     })
 };
 
@@ -89,6 +88,23 @@ async function updateUserById(req, res) {
     })
 };
 
+async function updateUserPassword(req, res) {
+    let { password } = req.body;
+    const userId = req.user.id
+
+    const hashedPassword = await hashPassword(password)
+
+    let user = await userModel.findByIdAndUpdate(userId, { hashedPassword }, { new: true });
+
+    if (!user) {
+        return res.status(404).send("User does not exit")
+    }
+    res.status(201).json({
+        msg: "User updated Successfully",
+        data: user
+    })
+}
+
 async function deleteUserById(req, res) {
     const id = req.params.id;
 
@@ -135,5 +151,6 @@ module.exports = {
     getAllUser,
     getOneUser,
     getSellers,
-    getSellerById
+    getSellerById,
+    updateUserPassword
 }

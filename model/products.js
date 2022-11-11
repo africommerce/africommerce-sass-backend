@@ -5,8 +5,11 @@ const Schema = mongoose.Schema;
 const ratingSchema = new Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "User ID required!"],
+    ref: "User"
+  },
+
+  comment: {
+    type: String,
   },
   value: {
     type: Number,
@@ -15,27 +18,9 @@ const ratingSchema = new Schema({
     required: [true, 'Please provide rating value!']
   },
 },
-{timestamps: true}
+  { timestamps: true }
 );
 
-const reviewSchema = new Schema({
-  rating: {
-    type: Number,
-    min: [1],
-    max: [5],
-    required: [true, 'Please provide rating value!']
-  },
-  comment: {
-      type: String,
-      required: true
-  },
-  author:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-  }
-},{
-  timestamps: true
-})
 
 
 // Product Schema
@@ -61,7 +46,7 @@ const ProductSchema = new Schema(
       type: Number,
       required: [true, "product quantity required!"],
     },
-    amount_sold:{
+    amount_sold: {
       type: Number,
       default: 0
     },
@@ -82,7 +67,6 @@ const ProductSchema = new Schema(
       required: [true, 'Product owner Id required!']
     },
     ratings: [ratingSchema],
-    reviews: [reviewSchema],
     images: {
       type: String,
       required: [true, "Please provide an image link!"],

@@ -1,5 +1,6 @@
 var passport = require('passport');
 var { userModel } = require("../model/users");
+var Product = require("../model/products")
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
@@ -55,7 +56,7 @@ exports.verifyUserType = async (req, res, next) => {
 }
 
 exports.verifyAuthor = async (req, res, next) => {
-    const article = await Article.findById(req.params.articleID).populate('author')
+    const product = await Product.findById(req.params.product).populate('author')
     if (!article) {
         res.status(403).json({ msg: 'Id not available' })
         return;

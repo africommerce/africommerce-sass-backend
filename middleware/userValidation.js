@@ -4,13 +4,13 @@ const { body, validationResult } = require('express-validator')
 function validateUser() {
     return [
         // username must be an email
-        body('firstname').notEmpty(),
-        body('lastname').notEmpty(),
-        body('username').notEmpty(),
-        body('email').isEmail(),
+        body('firstname').notEmpty().withMessage("Firstname is required!"),
+        body('lastname').notEmpty().withMessage("Lastname is required!"),
+        body('username').notEmpty().withMessage("username is required!"),
+        body('email').isEmail().withMessage("Invalid email!"),
         // password must be at least 5 chars long
-        body('password').isLength({ min: 6 }),
-        body("phonenumber").notEmpty()
+        body('password').isLength({ min: 6 }).withMessage("Password must have minmum of 6 characters!"),
+        body("phonenumber").notEmpty().withMessage("Phone number is required!")
     ]
 }
 

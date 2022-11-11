@@ -11,7 +11,8 @@ const {
   loginUser,
   logoutUser,
   getSellers,
-  getSellerById
+  getSellerById,
+  updateUserPassword,
 } = require("./userController")
 const { validateUser, validate } = require("../../middleware/userValidation")
 
@@ -25,11 +26,11 @@ router
   .route('/signup')
   .post(validateUser(), validate, createUser)
 
- router 
+router
   .route('/loginuser')
   .post(loginUser)
 
-  router 
+router
   .route('/logout')
   .get(authenticate.verifyUser, logoutUser)
 
@@ -42,11 +43,16 @@ router
   .route('/sellers/:id')
   .get(getSellerById)
 
+router
+  .route('/update_password')
+  .put(authenticate.verifyUser, updateUserPassword)
 
 router
   .route('/:id')
   .put(updateUserById)
   .get(getOneUser)
   .delete(deleteUserById)
+
+
 
 module.exports = router;
