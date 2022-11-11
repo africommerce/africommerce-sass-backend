@@ -26,7 +26,7 @@ async function getBusinessUserInfo(req, res) {
 }
 
 async function getAllBusinessUser(req, res) {
-    const user = await businessModel.find({})
+    const user = await businessModel.find({}).populate("owner")
     res.json({
         status: 200,
         data: user

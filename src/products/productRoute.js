@@ -19,7 +19,7 @@ const {
     bestSeller
 } = require("./productController")
 
-const {CreateReview, getReviews, updateReview, deleteReview} = require('./ReviewController')
+const { CreateReview, getReviews, updateReview, deleteReview } = require('./ReviewController')
 
 const { validateProduct, validate } = require("../../middleware/productValidation")
 
@@ -59,7 +59,7 @@ productRoute.route('/:id/reviews')
     .get(authenticate.verifyUser, CreateReview)
 
 productRoute.route('/:id/reviews/:reviewID')
-    .put(authenticate.verifyUser, authenticate.verifyAuthor,updateReview)
+    .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
     .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 
 

@@ -19,10 +19,10 @@ router
 
 router
     .route('/:id')
-    .get(authenticate.verifyUser, getBusinessUserInfo)
+    .get(getBusinessUserInfo)
 
 router
     .route('/:id')
-    .put(updateBusinessInfo)
+    .put(authenticate.verifyUser, authenticate.verifyAuthor, updateBusinessInfo)
 
 module.exports = router

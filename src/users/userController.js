@@ -6,35 +6,30 @@ const { hashPassword, validateUser } = require("../../config/helper");
 const authenticate = require("../../middleware/authenticate");
 
 async function createUser(req, res) {
-  const { firstname, lastname, username, email, password, phonenumber } =
-    req.body;
-  let userExist = await userModel.findOne({ username: username });
-  if (!userExist) {
-    userExist = await userModel.findOne({ email: email });
-  }
-  if (userExist) {
-    return res.status(409).send("This user already exist!");
-  }
-  const newUser = {
-    firstname,
-    lastname,
-    username,
-    email,
-    password,
-    phonenumber,
-  };
-  const hashedPassword = await hashPassword(newUser.password);
-  newUser.password = hashedPassword;
-  const user = await userModel.create(newUser);
-
-  if (user) {
-    const { password, ...others } = user._doc;
-    return res.json({
-      msg: "Registration successful!",
-      data: others,
-    });
-  }
-}
+    const { firstname, lastname, username, email, password, phonenumber } = req.body;
+    let userExist = await userModel.findOne({ username: username })
+    if (!userExist) {
+        userExist = await userModel.findOne({ email: email })
+    }
+    if (userExist) {
+        return res.status(409).send("This user already exist!")
+    }
+    const newUser = {
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
+        phonenumber
+    }
+    const hashedPassword = await hashPassword(newUser.password)
+    newUser.password = hashedPassword
+    const user = await userModel.create(newUser)
+    res.json({
+        msg: "Registration successful!",
+        data: user
+    })
+};
 
 const loginUser = async (req, res) => {
   const { identity, password } = req.body;
@@ -79,10 +74,10 @@ async function getOneUser(req, res) {
 }
 
 async function updateUserById(req, res) {
-  const id = req.params.id;
-  const bodyToUpdate = req.body;
+    const id = req.params.id;
+    const bodyToUpdate = req.body;
 
-  let user = await userModel.findByIdAndUpdate(id, bodyToUpdate, { new: true });
+    let user = await userModel.findByIdAndUpdate(id, bodyToUpdate, { new: true });
 
   if (!user) {
     return res.status(404).send("User does not exit");
@@ -107,23 +102,21 @@ async function deleteUserById(req, res) {
   });
 }
 
-async function getSellers(req, res, next) {
-  const sellers = await userModel.aggregate([
-    {
-      $match: {
-        usertype: "business",
-      },
-    },
-  ]);
-  res.status(200).json({ status: true, sellers: sellers });
+
+async function getSellers(req, res, next){
+    const sellers = await userModel.aggregate([
+        {
+            $match: {
+                usertype: "business"
+            }
+        }
+    ])
+    res.status(200).json({status:true, sellers:sellers})
 }
 
-async function getSellerById(req, res) {
-  const sellerId = req.params.id;
-  const seller = await userModel.findOne({
-    _id: sellerId,
-    usertype: "business",
-  });
+async function getSellerById(req, res){
+    const sellerId = req.params.id
+    const seller = await userModel.findOne({_id: sellerId, usertype: "business"})
 
   res.status(200).json({
     status: true,
