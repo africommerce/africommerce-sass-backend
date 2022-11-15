@@ -6,28 +6,20 @@ const authenticate = require('../../middleware/authenticate')
 
 async function createUser(req, res) {
     const { firstname, lastname, username, email, password, phonenumber } = req.body;
-    let userExist = await userModel.findOne({ username: username })
-    if (!userExist) {
-        userExist = await userModel.findOne({ email: email })
-    }
+    let userExist = await userModel.findOne({ username: username }) 
+                    || await userModel.findOne({ email: email })
     if (userExist) {
-        return res.status(409).send("This user already exist!")
+        return res.status(409).json({status: false, msg: "This user already exist!"})
     }
-    const newUser = {
-        firstname,
-        lastname,
-        username,
-        email,
-        password,
-        phonenumber
-    }
-    const hashedPassword = await hashPassword(newUser.password)
-    newUser.password = hashedPassword
-    const user = await userModel.create(newUser)
-    const userToReturn = await userModel.findById(user.id)
+    
+    const user = await userModel.create({
+        firstname, lastname, username, email, password, phonenumber
+    })
+
+   user.password = undefined
     res.json({
         msg: "Registration successful!",
-        data: userToReturn
+        user
     })
 };
 
