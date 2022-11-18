@@ -1,6 +1,6 @@
 //importing the mongoose database ORM
 const mongoose = require("mongoose")
-const bcrypt = require('bcrypt')
+const argon2 = require("argon2")
 const Schema = mongoose.Schema
 
 
@@ -91,10 +91,10 @@ const businessUser = new mongoose.Schema({
 )
 
 
-UserSchema.pre('save', async function(){
-    const hash = await bcrypt.hash(this.password, 10)
+UserSchema.pre('save', async function () {
+    const hash = await argon2.hash(this.password, 10)
 
-    this.password=hash
+    this.password = hash
 
 })
 

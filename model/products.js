@@ -30,9 +30,10 @@ const ProductSchema = new Schema(
       type: String,
       required: [true, "Product name is required!"],
     },
-    brand_name: {
-      type: String,
-      required: [true, "Brand name is required!"],
+    brand: {
+      type: mongoose.Types.ObjectId,
+      ref: "Brand",
+      default: "Unbranded"
     },
     product_details: {
       type: String,
@@ -60,6 +61,10 @@ const ProductSchema = new Schema(
     },
     warranty: {
       type: String,
+    },
+    refundable: {
+      type: Boolean,
+      default: true
     },
     owner_id: {
       type: mongoose.Schema.Types.ObjectId,
