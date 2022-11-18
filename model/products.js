@@ -1,39 +1,35 @@
-// //importing the mongoose database ORM
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+// importing the mongoose database ORM
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-const ratingSchema = new Schema({
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+const ratingSchema = new Schema(
+  {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    comment: String,
+    value: {
+      type: Number,
+      min: [1, 'Rating is too low!'],
+      max: [5, 'Rating is too high!'],
+      required: [true, 'Please provide rating value!'],
+    },
   },
-
-  comment: {
-    type: String,
-  },
-  value: {
-    type: Number,
-    min: [1, "Rating is too low!"],
-    max: [5, "Rating is too high!"],
-    required: [true, 'Please provide rating value!']
-  },
-},
   { timestamps: true }
-);
-
-
+)
 
 // Product Schema
 const ProductSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Product name is required!"],
+      required: [true, 'Product name is required!'],
     },
     brand: {
       type: mongoose.Types.ObjectId,
-      ref: "Brand",
-      default: "Unbranded"
+      ref: 'Brand',
+      default: 'Unbranded',
     },
     product_details: {
       type: String,
@@ -41,44 +37,44 @@ const ProductSchema = new Schema(
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'category',
-      required: [true, "please provide product category!"],
+      required: [true, 'please provide product category!'],
     },
     quantity: {
       type: Number,
-      required: [true, "product quantity required!"],
+      required: [true, 'product quantity required!'],
     },
     amount_sold: {
       type: Number,
-      default: 0
+      default: 0,
     },
     price: {
       type: Number,
-      required: [true, "product price is required!"],
+      required: [true, 'product price is required!'],
     },
     desc: {
       type: String,
-      required: [true, "product description is required!"],
+      required: [true, 'product description is required!'],
     },
     warranty: {
       type: String,
     },
     refundable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     owner_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, 'Product owner Id required!']
+      ref: 'User',
+      required: [true, 'Product owner Id required!'],
     },
     ratings: [ratingSchema],
     images: {
       type: String,
-      required: [true, "Please provide an image link!"],
+      required: [true, 'Please provide an image link!'],
     },
   },
   { timestamps: true }
-);
+)
 
-const Products = mongoose.model("Product", ProductSchema);
-module.exports = Products; //exporting the created model
+const Products = mongoose.model('Product', ProductSchema)
+module.exports = Products // exporting the created model

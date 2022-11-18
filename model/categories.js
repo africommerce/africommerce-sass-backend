@@ -6,16 +6,15 @@ const CategorySchema = new Schema({
   category_name: {
     type: String,
     unique: true,
-    required: [true, "Category name is required!"],
-   
+    required: [true, 'Category name is required!'],
   },
   product_id: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product"
-    }
+      ref: 'Product',
+    },
   ],
-});
+})
 
 const Category = mongoose.model('category', CategorySchema)
-module.exports=Category
+module.exports = Category

@@ -1,80 +1,77 @@
-var passport = require('passport');
-var { userModel } = require("../model/users");
-var Product = require("../model/products")
-var JwtStrategy = require('passport-jwt').Strategy;
-var jwt = require('jsonwebtoken');
+const passport = require('passport')
+const { userModel } = require('../model/users')
+const Product = require('../model/products')
+const JwtStrategy = require('passport-jwt').Strategy
+const jwt = require('jsonwebtoken')
 
-var config = require('../config/config');
+const config = require('../config/config')
 
 const cookieExtractor = function (req) {
-    var token = null
-    if (req && req.cookies) {
-        token = req.cookies['jwt_token']
-    }
-    return token
+  let token = null
+  if (req && req.cookies) {
+    token = req.cookies['jwt_token']
+  }
+  return token
 }
 
 exports.getToken = function (user) {
-    return jwt.sign(user, config.jwtSecret,
-        { expiresIn: 3600 });
-};
+  return jwt.sign(user, config.jwtSecret, { expiresIn: 3600 })
+}
 
-var opts = {};
-opts.jwtFromRequest = cookieExtractor;
-opts.secretOrKey = config.jwtSecret;
+const opts = {}
+opts.jwtFromRequest = cookieExtractor
+opts.secretOrKey = config.jwtSecret
 
-exports.jwtPassport = passport.use(new JwtStrategy(opts,
-    (jwt_payload, done) => {
-        userModel.findOne({ _id: jwt_payload._id }, (err, user) => {
-            if (err) {
-                return done(err, false);
-            }
-            else if (user) {
-                return done(null, user);
-            }
-            else {
-                return done(null, false);
-            }
-        });
-    }));
+exports.jwtPassport = passport.use(
+  new JwtStrategy(opts, (jwt_payload, done) => {
+    userModel.findOne({ _id: jwt_payload._id }, (err, user) => {
+      if (err) {
+        return done(err, false)
+      } else if (user) {
+        return done(null, user)
+      } else {
+        return done(null, false)
+      }
+    })
+  })
+)
 
-exports.verifyUser = passport.authenticate('jwt', { session: false });
+exports.verifyUser = passport.authenticate('jwt', { session: false })
 
 exports.verifyAdmin = async (req, res, next) => {
-    try {
-        const user = await userModel.findOne({ _id: req.user._id })
-        if (user.admin) {
-            next()
-        }
-    } catch (err) {
-        res.json({ status: false, err, message: 'you are not authorised' })
+  try {
+    const user = await userModel.findOne({ _id: req.user._id })
+    if (user.admin) {
+      next()
     }
+  } catch (err) {
+    res.json({ status: false, err, message: 'you are not authorised' })
+  }
 }
 
 exports.verifyUserType = async (req, res, next) => {
-    const user = await userModel.findOne({ _id: req.user._id })
-    if (user.usertype == 'business') {
-        return next()
-    }
-    return res.status(404).json({
-        msg: "You are not a business",
-        status: false
-    })
+  const user = await userModel.findOne({ _id: req.user._id })
+  if (user.usertype === 'business') {
+    return next()
+  }
+  return res.status(404).json({
+    msg: 'You are not a business',
+    status: false,
+  })
 }
 
 exports.verifyAuthor = async (req, res, next) => {
-    const product = await Product.findById(req.params.product).populate('author')
-    if (!article) {
-        res.status(403).json({ msg: 'Id not available' })
-        return;
-    }
-    let userRequesting = req.user._id.toString()
-    let articleAuthor = article.author._id.toString()
+  const product = await Product.findById(req.params.product).populate('author')
+  if (!product) {
+    res.status(403).json({ msg: 'Id not available' })
+    return
+  }
+  let userRequesting = req.user._id.toString()
+  let productOwner = product.owner_id.toString()
 
-    if (userRequesting == articleAuthor) {
-        next()
-    }
-    else {
-        res.status(403).json({ msg: 'You are not authorised to update this blog' })
-    }
+  if (userRequesting === productOwner) {
+    next()
+  } else {
+    res.status(403).json({ msg: 'You are not authorised to update this blog' })
+  }
 }
