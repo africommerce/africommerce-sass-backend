@@ -14,12 +14,20 @@ const {
   TopProducts,
   latestProduct,
   bestSelling,
-  bestSeller
+  bestSeller,
 } = require('./productController')
 
-const { CreateReview, getReviews, updateReview, deleteReview } = require('./ReviewController')
+const {
+  CreateReview,
+  getReviews,
+  updateReview,
+  deleteReview,
+} = require('./ReviewController')
 
-const { validateProduct, validate } = require('../../middleware/productValidation')
+const {
+  validateProduct,
+  validate,
+} = require('../../middleware/productValidation')
 
 productRoute
   .route('/')
@@ -28,36 +36,34 @@ productRoute
     res.setHeader('Content-Type', 'application/json')
     next()
   })
-  .post(authenticate.verifyUser, authenticate.verifyUserType, validateProduct(), validate, createProduct)
+  .post(
+    authenticate.verifyUser,
+    authenticate.verifyUserType,
+    validateProduct(),
+    validate,
+    createProduct
+  )
   .get(getAllProducts)
 
+productRoute.route('/top-rated-product').get(TopProducts)
+productRoute.route('/latest-products').get(latestProduct)
+productRoute.route('/best-selling').get(bestSelling)
+
+productRoute.route('/best-sellers').get(bestSeller)
 
 productRoute
-  .route('/top-rated-product')
-  .get(TopProducts)
-productRoute
-  .route('/latest-products')
-  .get(latestProduct)
-productRoute
-  .route('/best-selling')
-  .get(bestSelling)
-
-productRoute
-  .route('/best-sellers')
-  .get(bestSeller)
-
-
-
-productRoute.route('/:id')
+  .route('/:id')
   .put(updateProduct)
   .get(getProduct)
   .delete(deleteProduct)
 
-productRoute.route('/:id/reviews')
+productRoute
+  .route('/:id/reviews')
   .get(getReviews)
   .get(authenticate.verifyUser, CreateReview)
 
-productRoute.route('/:id/reviews/:reviewID')
+productRoute
+  .route('/:id/reviews/:reviewID')
   .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
   .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 

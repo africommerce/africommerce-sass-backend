@@ -4,7 +4,6 @@ const { userModel } = require('../../model/users')
 const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
-
 const createProduct = async (req, res) => {
   /**
    * create new product with required parameters
@@ -20,9 +19,8 @@ const createProduct = async (req, res) => {
     owner_id: req.user.id,
     refundable: req.body.refundable,
     product_details: req.body.product_details,
-    warranty: req.body.warranty
+    warranty: req.body.warranty,
   })
-
 
   const category = await Category.findOne({ category_name: req.body.category })
   if (!category) {
@@ -33,13 +31,11 @@ const createProduct = async (req, res) => {
   const brand = await brandModel.findOne({ name: productToSave.brand })
   if (!brand) {
     delete productToSave.brand
-  }
-  else {
+  } else {
     productToSave.brand = brand.id
   }
 
   console.log(productToSave)
-
 
   const savedProduct = await productToSave.save()
   res.status(201).send(savedProduct)
@@ -47,7 +43,6 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
-
     // NAME OF CATEGORY FIELD: VALUE
     // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
@@ -57,41 +52,39 @@ const getAllProducts = async (req, res) => {
     const query = helper.buildQuery(req.query, category)
     const paginate = helper.pages(req.query.page)
 
-    const products = await Product
-      .find(query)
+    const products = await Product.find(query)
       .skip(paginate.skip)
       .limit(paginate.limit)
 
     return res.status(200).json({ nbHits: products.length, products: products })
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(400).json({ status: false, error: err })
   }
 }
-
-
 
 const getProduct = async (req, res) => {
   const { id: productID } = req.params
   const product = await Product.findOne({ id: productID })
 
   const productCategory = product.category
-  const relatedProducts = await Product
-    .find({ category: productCategory, _id: { $ne: productID } })
-    .limit(10)
+  const relatedProducts = await Product.find({
+    category: productCategory,
+    _id: { $ne: productID },
+  }).limit(10)
 
   res.status(200).json({
     status: true,
     product: product,
     relatedProducts: relatedProducts,
   })
-
 }
 
 const updateProduct = async (req, res) => {
   const productID = req.params.id
   // const { name, price, quantity, desc } = req.body
-  const product = await Product.findByIdAndUpdate(productID, req.body, { new: true })
+  const product = await Product.findByIdAndUpdate(productID, req.body, {
+    new: true,
+  })
   if (!product) {
     return res.status(404).send('Product to update not found!')
   }
@@ -106,7 +99,6 @@ const deleteProduct = async (req, res) => {
   }
   res.status(200).json({ msg: 'product deleted successfully' })
 }
-
 
 const TopProducts = async (req, res) => {
   const products = await Product.aggregate([
@@ -129,7 +121,11 @@ const TopProducts = async (req, res) => {
       //STAGE 2
       $addFields: {
         rating: {
-          $cond: [{ $eq: [{ $size: '$ratings' }, 0] }, 0, { $divide: ['$ratingSum', { $size: '$ratings' }] }],
+          $cond: [
+            { $eq: [{ $size: '$ratings' }, 0] },
+            0,
+            { $divide: ['$ratingSum', { $size: '$ratings' }] },
+          ],
         },
       },
     },
@@ -157,25 +153,23 @@ const TopProducts = async (req, res) => {
   })
 }
 
-
 const latestProduct = async (req, res) => {
   /*SORT PRODUCTS BY DATE */
   const latestProducts = await Product.find({})
     .sort({ createdAt: 'desc' })
     .limit(10)
   res.status(200).json({ status: true, latestProducts: latestProducts })
-
 }
 
-
 const bestSelling = async (req, res) => {
-
   /* SORT PRODUCT BY MOST SOLD */
-  const bestSellingProduct = await Product.find({}).sort({ amount_sold: 'desc' })
+  const bestSellingProduct = await Product.find({}).sort({
+    amount_sold: 'desc',
+  })
 
   res.status(200).json({
     status: true,
-    bestSellingProducts: bestSellingProduct
+    bestSellingProducts: bestSellingProduct,
   })
 }
 
@@ -214,7 +208,11 @@ const bestSeller = async (req, res) => {
       //STAGE 4
       $addFields: {
         sellerProductsTotalAvg: {
-          $cond: [{ $eq: [{ $size: '$products' }, 0] }, 0, { $divide: ['$sellerProductsTotal', { $size: '$products' }] }],
+          $cond: [
+            { $eq: [{ $size: '$products' }, 0] },
+            0,
+            { $divide: ['$sellerProductsTotal', { $size: '$products' }] },
+          ],
         },
       },
     },
@@ -245,6 +243,5 @@ module.exports = {
   TopProducts,
   latestProduct,
   bestSelling,
-  bestSeller
-
+  bestSeller,
 }

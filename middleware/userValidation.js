@@ -8,7 +8,9 @@ function validateUser() {
     body('username').notEmpty().withMessage('username is required!'),
     body('email').isEmail().withMessage('Invalid email!'),
     // password must be at least 5 chars long
-    body('password').isLength({ min: 6 }).withMessage('Password must have minmum of 6 characters!'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password must have minmum of 6 characters!'),
     body('phonenumber').notEmpty().withMessage('Phone number is required!'),
   ]
 }
