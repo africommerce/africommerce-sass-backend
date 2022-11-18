@@ -1,6 +1,7 @@
 const Product = require('../../model/products')
 const Category = require("../../model/categories")
 const { userModel } = require("../../model/users");
+const brandModel = require("../../model/brand")
 const helper = require('./utils/helper')
 
 
@@ -10,29 +11,34 @@ const createProduct = async (req, res) => {
    */
   const productToSave = new Product({
     name: req.body.name,
-    brand_name: req.body.brand_name,
+    brand: req.body.brand,
     category: req.body.category,
     quantity: req.body.quantity,
     price: req.body.price,
     desc: req.body.desc,
     images: req.body.images,
-    owner_id: req.user.id
+    owner_id: req.user.id,
+    refundable: req.body.refundable,
+    product_details: req.body.product_details,
+    warranty: req.body.warranty
   })
 
-
-  if (req.body.product_details) {
-    productToSave.product_details = req.body.product_details
-  }
-
-  if (req.body.warranty) {
-    productToSave.warranty = req.body.warranty
-  }
 
   const category = await Category.findOne({ category_name: req.body.category })
   if (!category) {
     productToSave.category = null
   }
   productToSave.category = category.id
+
+  const brand = await brandModel.findOne({ name: productToSave.brand })
+  if (!brand) {
+    delete productToSave.brand
+  }
+  else {
+    productToSave.brand = brand.id
+  }
+
+  console.log(productToSave)
 
 
   const savedProduct = await productToSave.save()

@@ -37,16 +37,11 @@ const loginUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-    try {
-        console.log(req.user)
-        res.clearCookie('jwt')
-        console.log('logout successful')
+    res.clearCookie('jwt_token')
+    console.log('logout successful')
 
-        await req.user.save()
-        res.json({ status: true, message: 'logout successful' })
-    } catch (err) {
-        res.status(500).send(err)
-    }
+    // await req.user.save()
+    res.json({ status: true, message: 'logout successful' })
 }
 
 async function getAllUser(req, res) {
