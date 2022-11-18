@@ -3,6 +3,7 @@ const productRoute = require('../src/products/productRoute')
 const userRoute = require('../src/users/users')
 const businessRouter = require('../src/users/business/buisnessRouter')
 const categoryRoute = require('../src/categories/categoryRoute')
+const brandRoute = require('../src/brand/brandRoute')
 
 // const passport = require('passport')
 
@@ -17,5 +18,6 @@ rootRouter.use('/users', userRoute)
 rootRouter.use('/products', productRoute)
 rootRouter.use('/business', businessRouter)
 rootRouter.use('/categories', categoryRoute)
+rootRouter.use('/brand', brandRoute)
 
 module.exports = rootRouter
