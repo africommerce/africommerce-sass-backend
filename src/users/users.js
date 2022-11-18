@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-var passport = require("passport")
+const express = require('express')
+const router = express.Router()
+// const passport = require('passport')
 const authenticate = require('../../middleware/authenticate')
 const {
   createUser,
@@ -13,8 +13,8 @@ const {
   getSellers,
   getSellerById,
   updateUserPassword,
-} = require("./userController")
-const { validateUser, validate } = require("../../middleware/userValidation")
+} = require('./userController')
+const { validateUser, validate } = require('../../middleware/userValidation')
 
 
 /* GET users listing. */
@@ -53,6 +53,4 @@ router
   .get(getOneUser)
   .delete(deleteUserById)
 
-
-
-module.exports = router;
+module.exports = router
