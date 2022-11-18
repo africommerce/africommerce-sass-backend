@@ -6,17 +6,17 @@ const authenticate = require('../../middleware/authenticate')
 
 async function createUser(req, res) {
     const { firstname, lastname, username, email, password, phonenumber } = req.body;
-    let userExist = await userModel.findOne({ username: username }) 
-                    || await userModel.findOne({ email: email })
+    let userExist = await userModel.findOne({ username: username })
+        || await userModel.findOne({ email: email })
     if (userExist) {
-        return res.status(409).json({status: false, msg: "This user already exist!"})
+        return res.status(409).json({ status: false, msg: "This user already exist!" })
     }
-    
+
     const user = await userModel.create({
         firstname, lastname, username, email, password, phonenumber
     })
 
-   user.password = undefined
+    user.password = undefined
     res.json({
         msg: "Registration successful!",
         user
@@ -30,9 +30,10 @@ const loginUser = async (req, res) => {
         return res.status(401).send("Invalid crendentials!")
     }
     var token = authenticate.getToken({ _id: user._id })
-    res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
-    res.json({ success: true, token, status: 'You are successfully logged in' })
+    res.cookie('jwt_token', token, { httpOnly: true }).status(200).json({
+        msg: "Login successful🌚🌚"
+    })
 }
 
 const logoutUser = async (req, res) => {

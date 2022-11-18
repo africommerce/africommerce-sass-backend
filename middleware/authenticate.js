@@ -2,10 +2,17 @@ var passport = require('passport');
 var { userModel } = require("../model/users");
 var Product = require("../model/products")
 var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var jwt = require('jsonwebtoken');
 
 var config = require('../config/config');
+
+const cookieExtractor = function (req) {
+    var token = null
+    if (req && req.cookies) {
+        token = req.cookies['jwt_token']
+    }
+    return token
+}
 
 exports.getToken = function (user) {
     return jwt.sign(user, config.jwtSecret,
@@ -13,7 +20,7 @@ exports.getToken = function (user) {
 };
 
 var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = config.jwtSecret;
 
 exports.jwtPassport = passport.use(new JwtStrategy(opts,
