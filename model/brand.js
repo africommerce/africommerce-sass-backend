@@ -11,7 +11,7 @@ const brandSchema = new Schema(
     product: [
       {
         type: mongoose.Types.ObjectId,
-        required: true,
+        ref: 'Product'
       },
     ],
   },
