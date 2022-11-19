@@ -39,7 +39,7 @@ const loginUser = async (req, res) => {
     return res.status(401).send('Invalid crendentials!')
   }
   var token = authenticate.getToken({ _id: user._id })
-  res.setHeader('Content-Type", "application/json')
+  res.setHeader('Content-Type', 'application/json')
   res.cookie('jwt_token', token, { httpOnly: true }).status(200).json({
     msg: 'Login successful',
   })

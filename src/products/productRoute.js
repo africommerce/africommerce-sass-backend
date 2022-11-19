@@ -19,7 +19,7 @@ const {
 
 const {
   CreateReview,
-  getReviews,
+  getReview,
   updateReview,
   deleteReview,
 } = require('./ReviewController')
@@ -51,20 +51,17 @@ productRoute.route('/best-selling').get(bestSelling)
 
 productRoute.route('/best-sellers').get(bestSeller)
 
+productRoute.route('/reviews').post(authenticate.verifyUser, CreateReview)
+
+productRoute
+  .route('/reviews/:id')
+  .get(getReview)
+  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
+
 productRoute
   .route('/:id')
   .put(updateProduct)
   .get(getProduct)
   .delete(deleteProduct)
-
-productRoute
-  .route('/:id/reviews')
-  .get(getReviews)
-  .get(authenticate.verifyUser, CreateReview)
-
-productRoute
-  .route('/:id/reviews/:reviewID')
-  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
-
 module.exports = productRoute

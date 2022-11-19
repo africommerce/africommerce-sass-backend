@@ -29,13 +29,10 @@ const createProduct = async (req, res) => {
   productToSave.category = category.id
 
   const brand = await brandModel.findOne({ name: productToSave.brand })
+  productToSave.brand = brand.id
   if (!brand) {
     delete productToSave.brand
-  } else {
-    productToSave.brand = brand.id
   }
-
-  console.log(productToSave)
 
   const savedProduct = await productToSave.save()
   res.status(201).send(savedProduct)

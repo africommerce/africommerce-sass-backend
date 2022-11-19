@@ -1,23 +1,5 @@
-// importing the mongoose database ORM
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-
-const ratingSchema = new Schema(
-  {
-    user_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    comment: String,
-    value: {
-      type: Number,
-      min: [1, 'Rating is too low!'],
-      max: [5, 'Rating is too high!'],
-      required: [true, 'Please provide rating value!'],
-    },
-  },
-  { timestamps: true }
-)
 
 // Product Schema
 const ProductSchema = new Schema(
@@ -29,7 +11,6 @@ const ProductSchema = new Schema(
     brand: {
       type: mongoose.Types.ObjectId,
       ref: 'Brand',
-      default: 'Unbranded',
     },
     product_details: {
       type: String,
@@ -67,7 +48,16 @@ const ProductSchema = new Schema(
       ref: 'User',
       required: [true, 'Product owner Id required!'],
     },
-    ratings: [ratingSchema],
+    rating: {
+      type: Number,
+      default: 0
+    },
+    reviews: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Review',
+      },
+    ],
     images: {
       type: String,
       required: [true, 'Please provide an image link!'],
@@ -75,6 +65,6 @@ const ProductSchema = new Schema(
   },
   { timestamps: true }
 )
-
 const Products = mongoose.model('Product', ProductSchema)
-module.exports = Products // exporting the created model
+
+module.exports = Products

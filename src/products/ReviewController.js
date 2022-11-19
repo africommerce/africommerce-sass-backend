@@ -1,69 +1,55 @@
-const Product = require('../../model/products')
-const Category = require("../../model/categories")
-const { userModel } = require("../../model/users");
+const Review = require('../../model/review')
+const Product = require("../../model/products")
 
 const CreateReview = async (req, res) => {
-    const { id } = req.params// destructured the req.params.id and passed it to var
-    const review = await Product.findOne({ _id: id })
-    if (review) {
-        req.body.author = req.user.id
-        review.ratings.push(req.body)
-
-        await review.save()
-
-        const newReview = await Product.findById(review._id).populate('reviews.author')
-        res.status(200).json({ status: true, newReview })
-    } else {
-        res.status(404).json({ status: false, message: "Product not found" })
-    }
-
+  const { rating, comment, product_id } = req.body
+  const owner_id = req.user.id
+  const product = await Product.findById(product_id)
+  if (!product) {
+    return res.status(400).send('Product to review not found!')
+  }
+  const review = await Review.create({
+    rating,
+    comment,
+    product: product_id,
+    owner_id,
+  })
+  product.reviews.push(review.id)
+  product.rating = review.rating
+  await product.save()
+  res.status(200).json({
+    msg: 'Review created successfully!',
+    review,
+  })
 }
 
-const getReviews = async (req, res) => {
-    const { id } = req.params// destructured the req.params.id and passed it to var
-    const reviews = await Product.findOne({ _id: id }).populate('reviews.user_id')
-    if (review) {
-        res.status(200).json({ status: true, reviews: reviews.reviews })
-    } else {
-        res.status(404).json({ status: false, message: "Product not found" })
-
-    }
+const getReview = async (req, res) => {
+  const review = await Review.findById(req.params.id)
+  if (!review) {
+    return res.status(404).send('Review with this id not found!')
+  }
+  res.json({
+    review
+  })
 }
 
 const updateReview = async (req, res) => {
-    const review = await Product.findOne({ _id: req.params.id }).populate('reviews.author')
-    if (review) {
-        if (req.body.rating) {
-            review.rating = req.body.rating
-        }
-        if (req.body.comment) {
-            review.comment = req.body.comment
-        }
-
-        await review.save()
-        res.status(200).json({ status: true, reviews: review.reviews })
-
-    } else {
-        res.status(404).json({ status: false, message: "Product not found" })
-
-    }
+  const review = await Review.findByIdAndUpdate(req.params.id, {rating, comment}, {new: true})
+  if(!review) {
+    return res.send("Review to update not found!")
+  }
+  res.json({
+    msg : "Review update successfully!",
+    review
+  })
 }
 
 const deleteReview = async (req, res) => {
-    const review = await Product.findByIdAndUpdate(req.params.id, {
-        $pull: {
-            reviews: { _id: req.params.reviewID }
-        }
-    }, { new: true })
-    if (review) {
-        const updatedReview = Product.findById(req.params.id).populate('reviews.author')
-
-        res.status(200).json({ status: true, reviews: updatedReview.reviews })
-
-    } else {
-        res.status(404).json({ status: false, message: "Product not found" })
-
-    }
+  const review = await Review.findByIdAndDelete(req.params.id)
+  if(!review) {
+    return res.send("Review to delete not found!")
+  }
+  res.send("Review deleted successfully!")
 }
 
-module.exports = { CreateReview, getReviews, updateReview, deleteReview }
+module.exports = { CreateReview, getReview, updateReview, deleteReview }
