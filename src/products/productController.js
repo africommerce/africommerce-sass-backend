@@ -5,58 +5,61 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
-  /**
-   * create new product with required parameters
-   */
-  const productToSave = new Product({
+  let productToSave = {
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
-    quantity: req.body.quantity,
+    quantity : req.body.quantity,
     price: req.body.price,
     desc: req.body.desc,
     images: req.body.images,
-    owner_id: req.user.id,
     refundable: req.body.refundable,
-    product_details: req.body.product_details,
-    warranty: req.body.warranty,
-  })
-
-  const category = await Category.findOne({ category_name: req.body.category })
-  if (!category) {
-    productToSave.category = null
+    product_detail: req.body.product_detail,
+    warranty: req.body.warranty
   }
-  productToSave.category = category.id
+  const owner_id = req.user.id
 
-  const brand = await brandModel.findOne({ name: productToSave.brand })
-  productToSave.brand = brand.id
-  if (!brand) {
+  productToSave.owner_id = owner_id
+  const categoryInstance = await Category.findOne({
+    category_name: req.body.category,
+  })
+  if (!categoryInstance) {
+    delete productToSave.category
+  }
+  else {
+    productToSave.category = categoryInstance.id
+  }
+
+  const brandInstance = await brandModel.findOne({ name: productToSave.brand })
+  if (!brandInstance) {
     delete productToSave.brand
   }
+  else {
+    productToSave.brand = brandInstance.id
+  }
 
-  const savedProduct = await productToSave.save()
-  res.status(201).send(savedProduct)
+  const product = await Product.create(productToSave)
+  res.status(200).json({
+    msg: 'Product created successfully!',
+    product,
+  })
 }
 
 const getAllProducts = async (req, res) => {
-  try {
-    // NAME OF CATEGORY FIELD: VALUE
-    // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
+  // NAME OF CATEGORY FIELD: VALUE
+  // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
-    const category = req.query.category_name
-      ? await Category.findOne({ category_name: req.query.category_name })
-      : undefined
-    const query = helper.buildQuery(req.query, category)
-    const paginate = helper.pages(req.query.page)
+  const category = req.query.category_name
+    ? await Category.findOne({ category_name: req.query.category_name })
+    : undefined
+  const query = helper.buildQuery(req.query, category)
+  const paginate = helper.pages(req.query.page)
 
-    const products = await Product.find(query)
-      .skip(paginate.skip)
-      .limit(paginate.limit)
+  const products = await Product.find(query)
+    .skip(paginate.skip)
+    .limit(paginate.limit)
 
-    return res.status(200).json({ nbHits: products.length, products: products })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
-  }
+  return res.status(200).json({ nbHits: products.length, products: products })
 }
 
 const getProduct = async (req, res) => {
@@ -104,7 +107,7 @@ const TopProducts = async (req, res) => {
       $addFields: {
         ratingSum: {
           $reduce: {
-            input: '$ratings',
+            input: '$rating',
             initialValue: 0,
             in: {
               $add: ['$$value', '$$this.value'],
