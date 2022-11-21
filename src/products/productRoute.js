@@ -16,6 +16,7 @@ const {
   latestProduct,
   bestSelling,
   bestSeller,
+  fiveRandomProducts
 } = require('./productController')
 
 const {
@@ -54,6 +55,10 @@ productRoute.route('/best-selling').get(bestSelling)
 productRoute.route('/best-sellers').get(bestSeller)
 
 productRoute.route('/reviews').post(authenticate.verifyUser, CreateReview)
+
+productRoute
+  .route('/five-products')
+  .get(fiveRandomProducts)
 
 productRoute
   .route('/reviews/:id')
