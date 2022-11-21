@@ -251,6 +251,23 @@ const bestSeller = async (req, res) => {
   res.status(200).json({ status: true, bestSeller: bestSeller })
 }
 
+
+const fiveRandomProducts = async(req, res) => {
+  try{
+    const limit = 5
+    const productObj = await Product.find({})
+    const page = helper.randomPages(productObj, limit)
+    const skip = (page - 1) * limit
+
+    const randomProducts = await Product.find({}).skip(skip).limit(limit)
+
+    return res.status(200).json({ status: true, nbHits: randomProducts.length, products: randomProducts })
+  }
+  catch(err){
+    return res.status(400).json({ status: false, error: err })
+  }
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -262,4 +279,5 @@ module.exports = {
   latestProduct,
   bestSelling,
   bestSeller,
+  fiveRandomProducts
 }
