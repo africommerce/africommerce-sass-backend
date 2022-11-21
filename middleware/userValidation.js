@@ -12,6 +12,7 @@ function validateUser() {
       .isLength({ min: 6 })
       .withMessage('Password must have minmum of 6 characters!'),
     body('phonenumber').notEmpty().withMessage('Phone number is required!'),
+    body('phonenumber').matches(/^(0|\+\d{1,3}0?)\d{10}$/).withMessage('Please fill a valid phone number.')
   ]
 }
 
