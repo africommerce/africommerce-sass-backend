@@ -9,6 +9,7 @@ const {
   createProduct,
   getProduct,
   getAllProducts,
+  getAllProductsByRating,
   updateProduct,
   deleteProduct,
   TopProducts,
@@ -45,6 +46,7 @@ productRoute
   )
   .get(getAllProducts)
 
+productRoute.route('/rating').get(getAllProductsByRating)
 productRoute.route('/top-rated-product').get(TopProducts)
 productRoute.route('/latest-products').get(latestProduct)
 productRoute.route('/best-selling').get(bestSelling)
