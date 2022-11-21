@@ -62,6 +62,23 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
+const getAllProductsByRating = async (req,res)=>{
+  try {
+    const rating = req.query.rating
+
+    const products = await Product.find({rating:rating}).limit(10)
+
+    if(products.length == 0){
+       return res.status(404).json({ status: false, msg:"No products found!"})
+    }
+    return res.status(200).json({ nbHits: products.length, products: products })
+    
+    
+  } catch (error) {
+     return res.status(400).json({ status: false, error: err })
+  }
+}
+
 const getProduct = async (req, res) => {
   const { id: productID } = req.params
   const product = await Product.findOne({ id: productID })
@@ -237,6 +254,7 @@ const bestSeller = async (req, res) => {
 module.exports = {
   createProduct,
   getAllProducts,
+  getAllProductsByRating,
   getProduct,
   updateProduct,
   deleteProduct,
