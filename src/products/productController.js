@@ -55,27 +55,27 @@ const getAllProducts = async (req, res) => {
   const query = helper.buildQuery(req.query, category)
   const paginate = helper.pages(req.query.page)
 
-  const products = await Product.find(query)
+  const products = await Product
+    .find(query.query)
+    .sort(query.sortBy)
     .skip(paginate.skip)
     .limit(paginate.limit)
 
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
-const getAllProductsByRating = async (req,res)=>{
+const getAllProductsByRating = async (req,res) => {
   try {
     const rating = req.query.rating
 
-    const products = await Product.find({rating:rating}).limit(10)
+    const products = await Product.find({ rating:rating }).limit(10)
 
-    if(products.length == 0){
-       return res.status(404).json({ status: false, msg:"No products found!"})
+    if(products.length === 0){
+      return res.status(404).json({ status: false, msg:'No products found!' })
     }
     return res.status(200).json({ nbHits: products.length, products: products })
-    
-    
-  } catch (error) {
-     return res.status(400).json({ status: false, error: err })
+  } catch (err) {
+    return res.status(400).json({ status: false, error: err })
   }
 }
 
