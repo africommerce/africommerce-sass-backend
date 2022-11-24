@@ -15,6 +15,7 @@ const {
   updateUserPassword,
 } = require('./userController')
 const { validateUser, validate } = require('../../middleware/userValidation')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 
 /* GET users listing. */
 router.route('/').get(getAllUser)
@@ -27,12 +28,12 @@ router.route('/logout').get(authenticate.verifyUser, logoutUser)
 
 router.route('/sellers').get(getSellers)
 
-router.route('/sellers/:id').get(getSellerById)
+router.route(paramIsValidId, '/sellers/:id').get(getSellerById)
 
 router
   .route('/update_password')
   .put(authenticate.verifyUser, updateUserPassword)
 
-router.route('/:id').put(updateUserById).get(getOneUser).delete(deleteUserById)
+router.route(paramIsValidId, '/:id').put(updateUserById).get(getOneUser).delete(deleteUserById)
 
 module.exports = router

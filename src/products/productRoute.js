@@ -24,6 +24,7 @@ const {
   validateProduct,
   validate,
 } = require('../../middleware/productValidation')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 
 productRoute
   .route('/')
@@ -57,7 +58,7 @@ productRoute
 
 productRoute
   .route('/:id')
-  .put(updateProduct)
-  .get(getProduct)
-  .delete(deleteProduct)
+  .put(paramIsValidId, updateProduct)
+  .get(paramIsValidId, getProduct)
+  .delete(paramIsValidId, deleteProduct)
 module.exports = productRoute

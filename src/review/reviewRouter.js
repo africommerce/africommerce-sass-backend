@@ -1,5 +1,6 @@
 const reviewRouter = require('express').Router()
 const authenticate = require('../../middleware/authenticate')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 
 
 const {
@@ -11,15 +12,15 @@ const {
 } = require('./ReviewController')
 
 reviewRouter
-  .route('/reviews')
+  .route('/')
   .post(authenticate.verifyUser, CreateReview)
   .get(getAllReview)
 
 reviewRouter
-  .route('/reviews/:id')
-  .get(getReview)
-  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
+  .route('/:id')
+  .get(paramIsValidId, getReview)
+  .put(paramIsValidId, authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
+  .delete(paramIsValidId, authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 
 
 module.exports = reviewRouter

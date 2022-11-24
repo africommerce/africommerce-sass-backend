@@ -20,6 +20,6 @@ rootRouter.use('/products', productRoute)
 rootRouter.use('/business', businessRouter)
 rootRouter.use('/categories', categoryRoute)
 rootRouter.use('/brand', brandRoute)
-rootRouter.use('/review', reviewRouter)
+rootRouter.use('/reviews', reviewRouter)
 
 module.exports = rootRouter
