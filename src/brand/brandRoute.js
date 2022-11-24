@@ -1,4 +1,5 @@
 const express = require('express')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 
 const brandController = require('./brandController')
 const brandRoute = express.Router()
@@ -10,7 +11,7 @@ brandRoute
 
 brandRoute
   .route('/:id')
-  .put(brandController.updateBrand)
-  .delete(brandController.deleteBrand)
+  .put(paramIsValidId, brandController.updateBrand)
+  .delete(paramIsValidId, brandController.deleteBrand)
 
 module.exports = brandRoute

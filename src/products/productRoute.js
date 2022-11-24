@@ -19,13 +19,6 @@ const {
   fiveRandomProducts
 } = require('./productController')
 
-const {
-  CreateReview,
-  getReview,
-  updateReview,
-  deleteReview,
-  getAllReview,
-} = require('./ReviewController')
 
 const {
   validateProduct,
@@ -55,19 +48,12 @@ productRoute.route('/best-selling').get(bestSelling)
 
 productRoute.route('/best-sellers').get(bestSeller)
 
-productRoute.route('/reviews')
-  .post(authenticate.verifyUser, CreateReview)
-  .get(getAllReview)
+
 
 productRoute
   .route('/five-products')
   .get(fiveRandomProducts)
 
-productRoute
-  .route('/reviews/:id')
-  .get(getReview)
-  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 
 productRoute
   .route('/:id')
