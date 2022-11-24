@@ -1,8 +1,18 @@
 # Africommerce (Repo: `Africommerce`)
 
+
+<!-- Project Shields -->
+<div>
+  
+  [![Contributors][contributors-shield]][contributors-url]
+  [![Forks][forks-shield]][forks-url]
+  [![Stargazers][stars-shield]][stars-url]
+  [![Issues][issues-shield]][issues-url]
+  [![MIT License][license-shield]][license-url]
+</div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-51-orange.svg?style=flat-square)](#contributors-)
+<!-- [![All Contributors](https://img.shields.io/badge/all_contributors-51-orange.svg?style=flat-square)](#contributors-) -->
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -24,7 +34,7 @@ Here is a quick overview of the `Africommerce` repo setup:
 
 ### 🍴 Fork and Clone the Repo
 
-First, you need to fork the `react-play` repo. You can do this by clicking the `Fork` button on the top right corner of the repo. If you are new to forking, please watch this [YouTube Guide](https://www.youtube.com/) to get started.
+First, you need to fork the `Africommerce` repo. You can do this by clicking the `Fork` button on the top right corner of the repo. If you are new to forking, please watch this [YouTube Guide](https://youtu.be/HkdAHXoRtos?t=589) to get started.
 
 Once forked, you can clone the repo by clicking the `Clone or Download` button on the top right corner of the forked repo.
 
@@ -47,6 +57,9 @@ yarn install
 ### ⛓️ Create a `.env` file at the root of your project folder with the following content
 
 ```bash
+PORT=4000
+DB_URL=mongodb://localhost/africommerce
+JWTSECRET=super secret key
 
 ```
 
@@ -64,7 +77,7 @@ Or
 yarn start
 ```
 
-It runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+It runs the app in development mode on [http://localhost:4000](http://localhost:4000)
 
 ## 🤝 Contributing to `Africommerce`
 
@@ -102,10 +115,6 @@ If you found the app helpful, consider supporting us with a coffee.
 
 ---
 
-<h3 align="center">
-A ⭐️ to <b>africommerce</b> is to make us more 💪 stronger and motivated.
-</h3>
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -121,3 +130,16 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+
+<!-- Markdown Links & Images -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/africommerce/africommerce-sass-backend.svg?style=for-the-badge
+[contributors-url]: https://github.com/africommerce/africommerce-sass-backend/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/africommerce/africommerce-sass-backend.svg?style=for-the-badge
+[forks-url]: https://github.com/africommerce/africommerce-sass-backend/network/members
+[stars-shield]: https://img.shields.io/github/stars/africommerce/africommerce-sass-backend.svg?style=for-the-badge
+[stars-url]: https://github.com/africommerce/africommerce-sass-backend/stargazers
+[issues-shield]: https://img.shields.io/github/issues/africommerce/africommerce-sass-backend.svg?style=for-the-badge
+[issues-url]: https://github.com/africommerce/africommerce-sass-backend/issues
+[license-shield]: https://img.shields.io/github/license/africommerce/africommerce-sass-backend.svg?style=for-the-badge
+[license-url]: https://github.com/africommerce/africommerce-sass-backend/blob/main/LICENSE.md
