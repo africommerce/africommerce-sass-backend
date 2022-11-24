@@ -1,4 +1,5 @@
 const express = require('express')
+const authenticate = require('../../middleware/authenticate')
 
 const brandController = require('./brandController')
 const brandRoute = express.Router()
@@ -6,11 +7,11 @@ const brandRoute = express.Router()
 brandRoute
   .route('/')
   .get(brandController.getAllBrand)
-  .post(brandController.createBrand)
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, brandController.createBrand)
 
 brandRoute
   .route('/:id')
-  .put(brandController.updateBrand)
-  .delete(brandController.deleteBrand)
+  .put(authenticate.verifyUser, authenticate.verifyAdmin, brandController.updateBrand)
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, brandController.deleteBrand)
 
 module.exports = brandRoute

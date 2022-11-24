@@ -5,6 +5,7 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
+  
   /**
    * create new product with required parameters
    */
@@ -39,6 +40,7 @@ const createProduct = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
+
   try {
     // NAME OF CATEGORY FIELD: VALUE
     // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME

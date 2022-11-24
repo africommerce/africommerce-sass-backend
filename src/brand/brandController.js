@@ -16,7 +16,7 @@ exports.createBrand = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ 
             status: false, 
-            error: err
+            error: error
          })
     }
 }
@@ -41,7 +41,7 @@ exports.getAllBrand = async (req, res) => {
         } catch (err) {
           res.status(400).json({
             status: false,
-            err,
+            error,
           })
         }
 }
@@ -50,7 +50,7 @@ exports.getAllBrand = async (req, res) => {
 exports.updateBrand = async (req, res) => {
     try {
         const brandID = req.params.id
-        const brand = await Product.findByIdAndUpdate(brandID, req.body, {
+        const brand = await Brand.findByIdAndUpdate(brandID, req.body, {
             new: true,
           })
         if (!brand) {
@@ -63,14 +63,14 @@ exports.updateBrand = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             status: false,
-            err,
+            error,
           })
     }
 }
 
 exports.deleteBrand = async (req, res) => {
     try {
-        const brand = await Product.findOneAndDelete({ _id: req.params.id })
+        const brand = await Brand.findByIdAndDelete({ _id: req.params.id })
         if (!brand) {
             return res.status(404).send('Brand with this id not found!')
         }
@@ -81,7 +81,7 @@ exports.deleteBrand = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             status: false,
-            err,
+            error,
           })
     }
 }
