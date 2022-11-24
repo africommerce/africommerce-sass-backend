@@ -24,6 +24,7 @@ const {
   getReview,
   updateReview,
   deleteReview,
+  getAllReview,
 } = require('./ReviewController')
 
 const {
@@ -54,7 +55,9 @@ productRoute.route('/best-selling').get(bestSelling)
 
 productRoute.route('/best-sellers').get(bestSeller)
 
-productRoute.route('/reviews').post(authenticate.verifyUser, CreateReview)
+productRoute.route('/reviews')
+  .post(authenticate.verifyUser, CreateReview)
+  .get(getAllReview)
 
 productRoute
   .route('/five-products')
