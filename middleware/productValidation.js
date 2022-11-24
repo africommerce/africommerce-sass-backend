@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator')
 function validateProduct() {
   return [
     body('name').notEmpty().isString(),
-    body('brand_name').notEmpty().isString(),
+    body('brand').notEmpty().isString(),
     body('product_details').optional().isString(),
     body('category').notEmpty().isString(),
     body('quantity').notEmpty().isInt(),

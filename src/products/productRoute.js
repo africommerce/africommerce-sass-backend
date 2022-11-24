@@ -9,12 +9,14 @@ const {
   createProduct,
   getProduct,
   getAllProducts,
+  getAllProductsByRating,
   updateProduct,
   deleteProduct,
   TopProducts,
   latestProduct,
   bestSelling,
   bestSeller,
+  fiveRandomProducts
 } = require('./productController')
 
 const {
@@ -45,6 +47,7 @@ productRoute
   )
   .get(getAllProducts)
 
+productRoute.route('/rating').get(getAllProductsByRating)
 productRoute.route('/top-rated-product').get(TopProducts)
 productRoute.route('/latest-products').get(latestProduct)
 productRoute.route('/best-selling').get(bestSelling)
@@ -52,6 +55,10 @@ productRoute.route('/best-selling').get(bestSelling)
 productRoute.route('/best-sellers').get(bestSeller)
 
 productRoute.route('/reviews').post(authenticate.verifyUser, CreateReview)
+
+productRoute
+  .route('/five-products')
+  .get(fiveRandomProducts)
 
 productRoute
   .route('/reviews/:id')

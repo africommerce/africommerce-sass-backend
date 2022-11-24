@@ -5,56 +5,86 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
+<<<<<<< HEAD
   
   /**
    * create new product with required parameters
    */
   const productToSave = new Product({
+=======
+  let productToSave = {
+>>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
-    quantity: req.body.quantity,
+    quantity : req.body.quantity,
     price: req.body.price,
     desc: req.body.desc,
     images: req.body.images,
-    owner_id: req.user.id,
     refundable: req.body.refundable,
-    product_details: req.body.product_details,
-    warranty: req.body.warranty,
-  })
-
-  const category = await Category.findOne({ category_name: req.body.category })
-  if (!category) {
-    productToSave.category = null
+    product_detail: req.body.product_detail,
+    warranty: req.body.warranty
   }
-  productToSave.category = category.id
+  const owner_id = req.user.id
 
-  const brand = await brandModel.findOne({ name: productToSave.brand })
-  productToSave.brand = brand.id
-  if (!brand) {
+  productToSave.owner_id = owner_id
+  const categoryInstance = await Category.findOne({
+    category_name: req.body.category,
+  })
+  if (!categoryInstance) {
+    delete productToSave.category
+  }
+  else {
+    productToSave.category = categoryInstance.id
+  }
+
+  const brandInstance = await brandModel.findOne({ name: productToSave.brand })
+  if (!brandInstance) {
     delete productToSave.brand
   }
+  else {
+    productToSave.brand = brandInstance.id
+  }
 
-  const savedProduct = await productToSave.save()
-  res.status(201).send(savedProduct)
+  const product = await Product.create(productToSave)
+  res.status(200).json({
+    msg: 'Product created successfully!',
+    product,
+  })
 }
 
 const getAllProducts = async (req, res) => {
+<<<<<<< HEAD
 
+=======
+  // NAME OF CATEGORY FIELD: VALUE
+  // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
+
+  const category = req.query.category_name
+    ? await Category.findOne({ category_name: req.query.category_name })
+    : undefined
+  const query = helper.buildQuery(req.query, category)
+  const paginate = helper.pages(req.query.page)
+
+  const products = await Product
+    .find(query.query)
+    .sort(query.sortBy)
+    .skip(paginate.skip)
+    .limit(paginate.limit)
+
+  return res.status(200).json({ nbHits: products.length, products: products })
+}
+
+const getAllProductsByRating = async (req,res) => {
+>>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
   try {
-    // NAME OF CATEGORY FIELD: VALUE
-    // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
+    const rating = req.query.rating
 
-    const category = req.query.category_name
-      ? await Category.findOne({ category_name: req.query.category_name })
-      : undefined
-    const query = helper.buildQuery(req.query, category)
-    const paginate = helper.pages(req.query.page)
+    const products = await Product.find({ rating:rating }).limit(10)
 
-    const products = await Product.find(query)
-      .skip(paginate.skip)
-      .limit(paginate.limit)
-
+    if(products.length === 0){
+      return res.status(404).json({ status: false, msg:'No products found!' })
+    }
     return res.status(200).json({ nbHits: products.length, products: products })
   } catch (err) {
     return res.status(400).json({ status: false, error: err })
@@ -106,7 +136,7 @@ const TopProducts = async (req, res) => {
       $addFields: {
         ratingSum: {
           $reduce: {
-            input: '$ratings',
+            input: '$rating',
             initialValue: 0,
             in: {
               $add: ['$$value', '$$this.value'],
@@ -233,9 +263,27 @@ const bestSeller = async (req, res) => {
   res.status(200).json({ status: true, bestSeller: bestSeller })
 }
 
+
+const fiveRandomProducts = async(req, res) => {
+  try{
+    const limit = 5
+    const productObj = await Product.find({})
+    const page = helper.randomPages(productObj, limit)
+    const skip = (page - 1) * limit
+
+    const randomProducts = await Product.find({}).skip(skip).limit(limit)
+
+    return res.status(200).json({ status: true, nbHits: randomProducts.length, products: randomProducts })
+  }
+  catch(err){
+    return res.status(400).json({ status: false, error: err })
+  }
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
+  getAllProductsByRating,
   getProduct,
   updateProduct,
   deleteProduct,
@@ -243,4 +291,5 @@ module.exports = {
   latestProduct,
   bestSelling,
   bestSeller,
+  fiveRandomProducts
 }

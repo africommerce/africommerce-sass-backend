@@ -8,12 +8,6 @@ const brandSchema = new Schema(
       required: true,
       unique: true,
     },
-    product: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product'
-      },
-    ],
   },
   { timestamps: true }
 )
