@@ -4,6 +4,7 @@ const userRoute = require('../src/users/users')
 const businessRouter = require('../src/users/business/buisnessRouter')
 const categoryRoute = require('../src/categories/categoryRoute')
 const brandRoute = require('../src/brand/brandRoute')
+const reviewRouter = require('../src/review/reviewRouter')
 
 // const passport = require('passport')
 
@@ -19,5 +20,6 @@ rootRouter.use('/products', productRoute)
 rootRouter.use('/business', businessRouter)
 rootRouter.use('/categories', categoryRoute)
 rootRouter.use('/brand', brandRoute)
+rootRouter.use('/review', reviewRouter)
 
 module.exports = rootRouter

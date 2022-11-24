@@ -1,4 +1,4 @@
-const reviewRoute = require('express').Router()
+const reviewRouter = require('express').Router()
 const authenticate = require('../../middleware/authenticate')
 
 
@@ -10,13 +10,16 @@ const {
   getAllReview,
 } = require('./ReviewController')
 
-reviewRoute
+reviewRouter
   .route('/reviews')
   .post(authenticate.verifyUser, CreateReview)
   .get(getAllReview)
 
-reviewRoute
+reviewRouter
   .route('/reviews/:id')
   .get(getReview)
   .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
   .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
+
+
+module.exports = reviewRouter
