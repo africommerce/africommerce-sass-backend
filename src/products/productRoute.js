@@ -19,17 +19,12 @@ const {
   fiveRandomProducts
 } = require('./productController')
 
-const {
-  CreateReview,
-  getReview,
-  updateReview,
-  deleteReview,
-} = require('./ReviewController')
 
 const {
   validateProduct,
   validate,
 } = require('../../middleware/productValidation')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 
 productRoute
   .route('/')
@@ -54,21 +49,16 @@ productRoute.route('/best-selling').get(bestSelling)
 
 productRoute.route('/best-sellers').get(bestSeller)
 
-productRoute.route('/reviews').post(authenticate.verifyUser, CreateReview)
+
 
 productRoute
   .route('/five-products')
   .get(fiveRandomProducts)
 
-productRoute
-  .route('/reviews/:id')
-  .get(getReview)
-  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateReview)
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, deleteReview)
 
 productRoute
   .route('/:id')
-  .put(updateProduct)
-  .get(getProduct)
-  .delete(deleteProduct)
+  .put(paramIsValidId, updateProduct)
+  .get(paramIsValidId, getProduct)
+  .delete(paramIsValidId, deleteProduct)
 module.exports = productRoute
