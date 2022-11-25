@@ -55,19 +55,10 @@ const fiveRandomCategories = async (req, res) => {
   }
 }
 
-const fiveCategoriesAndProduct = async (req, res) => {
 
-  const CategoriesAndProduct = await Category.find({ $sample: { size: 5 } }).populate('product_id')
-
-  return res.status(200).json({
-    status: true,
-    CategoriesAndProduct
-  })
-}
 
 module.exports = {
   createCategory,
   getAllCategories,
   fiveRandomCategories,
-  fiveCategoriesAndProduct
 }

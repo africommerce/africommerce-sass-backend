@@ -12,8 +12,4 @@ categoryRoute
   .post(categoryController.createCategory)
   .get(categoryController.getAllCategories)
 
-categoryRoute
-  .route('/five-category-products')
-  .get(categoryController.fiveCategoriesAndProduct)
-
 module.exports = categoryRoute

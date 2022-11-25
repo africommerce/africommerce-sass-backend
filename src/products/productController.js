@@ -6,10 +6,7 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
-  /**
-   * create new product with required parameters
-   */
-  const productToSave = new Product({
+  let productToSave = {
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
@@ -19,13 +16,8 @@ const createProduct = async (req, res) => {
     images: req.body.images,
     refundable: req.body.refundable,
     product_detail: req.body.product_detail,
-<<<<<<< HEAD
-    warranty: req.body.warranty
-  })
-=======
     warranty: req.body.warranty,
   }
->>>>>>> 51c1fe2b7dd5cdfa27f1a1eb8236cd29bfd7f1af
   const owner_id = req.user.id
 
   productToSave.owner_id = owner_id
@@ -53,8 +45,6 @@ const createProduct = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-<<<<<<< HEAD
-=======
   // NAME OF CATEGORY FIELD: VALUE
   // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
@@ -72,21 +62,6 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
-const getAllProductsByRating = async (req, res) => {
->>>>>>> 51c1fe2b7dd5cdfa27f1a1eb8236cd29bfd7f1af
-  try {
-    const rating = req.query.rating
-
-    const products = await Product.find({ rating: rating }).limit(10)
-
-    if (products.length === 0) {
-      return res.status(404).json({ status: false, msg: 'No products found!' })
-    }
-    return res.status(200).json({ nbHits: products.length, products: products })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
-  }
-}
 
 const getAllProductsByRating = async (req, res) => {
   try {
@@ -300,6 +275,18 @@ const fiveRandomProducts = async (req, res) => {
   }
 }
 
+const fiveCategoriesAndProduct = async (req, res) => {
+
+  const CategoriesAndProduct = await Product.find({
+    $sample: { size: 5 }
+  })
+    .select('-_id -__v -createdAt -updatedAt')
+    .populate('category', '-_id -__v')
+  return res.status(200).json({
+    status: true,
+    CategoriesAndProduct
+  })
+}
 
 
 module.exports = {
@@ -314,4 +301,5 @@ module.exports = {
   bestSelling,
   bestSeller,
   fiveRandomProducts,
+  fiveCategoriesAndProduct
 }
