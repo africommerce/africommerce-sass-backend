@@ -7,13 +7,7 @@ const CategorySchema = new Schema({
     type: String,
     unique: true,
     required: [true, 'Category name is required!'],
-  },
-  product_id: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-    },
-  ],
+  }
 })
 
 const Category = mongoose.model('category', CategorySchema)
