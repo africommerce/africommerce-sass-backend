@@ -5,15 +5,10 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
-<<<<<<< HEAD
-  
   /**
    * create new product with required parameters
    */
   const productToSave = new Product({
-=======
-  let productToSave = {
->>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
@@ -24,7 +19,7 @@ const createProduct = async (req, res) => {
     refundable: req.body.refundable,
     product_detail: req.body.product_detail,
     warranty: req.body.warranty
-  }
+  })
   const owner_id = req.user.id
 
   productToSave.owner_id = owner_id
@@ -54,29 +49,6 @@ const createProduct = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-<<<<<<< HEAD
-
-=======
-  // NAME OF CATEGORY FIELD: VALUE
-  // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
-
-  const category = req.query.category_name
-    ? await Category.findOne({ category_name: req.query.category_name })
-    : undefined
-  const query = helper.buildQuery(req.query, category)
-  const paginate = helper.pages(req.query.page)
-
-  const products = await Product
-    .find(query.query)
-    .sort(query.sortBy)
-    .skip(paginate.skip)
-    .limit(paginate.limit)
-
-  return res.status(200).json({ nbHits: products.length, products: products })
-}
-
-const getAllProductsByRating = async (req,res) => {
->>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
   try {
     const rating = req.query.rating
 
@@ -90,6 +62,22 @@ const getAllProductsByRating = async (req,res) => {
     return res.status(400).json({ status: false, error: err })
   }
 }
+
+const getAllProductsByRating = async (req, res) => {
+  try {
+    const rating = req.query.rating
+
+    const products = await Product.find({ rating: rating }).limit(10)
+
+    if (products.length === 0) {
+      return res.status(404).json({ status: false, msg: 'No products found!' })
+    }
+    return res.status(200).json({ nbHits: products.length, products: products })
+  } catch (err) {
+    return res.status(400).json({ status: false, error: err })
+  }
+}
+
 
 const getProduct = async (req, res) => {
   const { id: productID } = req.params
@@ -279,6 +267,8 @@ const fiveRandomProducts = async(req, res) => {
     return res.status(400).json({ status: false, error: err })
   }
 }
+
+
 
 module.exports = {
   createProduct,
