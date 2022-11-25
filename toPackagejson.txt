@@ -1,2 +1,0 @@
-
-"start:dev": "NODE_ENV=development nodemon ./bin/www",
