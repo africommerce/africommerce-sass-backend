@@ -51,12 +51,6 @@ const ProductSchema = new Schema(
       type: Number,
       default: 0
     },
-    reviews: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'Review',
-      },
-    ],
     images: {
       type: String,
       required: [true, 'Please provide an image link!'],
@@ -64,6 +58,7 @@ const ProductSchema = new Schema(
   },
   { timestamps: true }
 )
+
 const Products = mongoose.model('Product', ProductSchema)
 
 module.exports = Products

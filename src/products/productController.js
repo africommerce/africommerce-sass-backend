@@ -1,4 +1,5 @@
 const Product = require('../../model/products')
+const Review = require('../../model/review')
 const Category = require('../../model/categories')
 const { userModel } = require('../../model/users')
 const brandModel = require('../../model/brand')
@@ -17,13 +18,13 @@ const createProduct = async (req, res) => {
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
-    quantity : req.body.quantity,
+    quantity: req.body.quantity,
     price: req.body.price,
     desc: req.body.desc,
     images: req.body.images,
     refundable: req.body.refundable,
     product_detail: req.body.product_detail,
-    warranty: req.body.warranty
+    warranty: req.body.warranty,
   }
   const owner_id = req.user.id
 
@@ -33,16 +34,14 @@ const createProduct = async (req, res) => {
   })
   if (!categoryInstance) {
     delete productToSave.category
-  }
-  else {
+  } else {
     productToSave.category = categoryInstance.id
   }
 
   const brandInstance = await brandModel.findOne({ name: productToSave.brand })
   if (!brandInstance) {
     delete productToSave.brand
-  }
-  else {
+  } else {
     productToSave.brand = brandInstance.id
   }
 
@@ -66,8 +65,7 @@ const getAllProducts = async (req, res) => {
   const query = helper.buildQuery(req.query, category)
   const paginate = helper.pages(req.query.page)
 
-  const products = await Product
-    .find(query.query)
+  const products = await Product.find(query.query)
     .sort(query.sortBy)
     .skip(paginate.skip)
     .limit(paginate.limit)
@@ -75,15 +73,19 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
+<<<<<<< HEAD
 const getAllProductsByRating = async (req,res) => {
 >>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
+=======
+const getAllProductsByRating = async (req, res) => {
+>>>>>>> 584e2588a411e016c04bd473a7111cb21cf1caf5
   try {
     const rating = req.query.rating
 
-    const products = await Product.find({ rating:rating }).limit(10)
+    const products = await Product.find({ rating: rating }).limit(10)
 
-    if(products.length === 0){
-      return res.status(404).json({ status: false, msg:'No products found!' })
+    if (products.length === 0) {
+      return res.status(404).json({ status: false, msg: 'No products found!' })
     }
     return res.status(200).json({ nbHits: products.length, products: products })
   } catch (err) {
@@ -95,6 +97,8 @@ const getProduct = async (req, res) => {
   const { id: productID } = req.params
   const product = await Product.findOne({ id: productID })
 
+  const reviews = await Review.find({ product: productID })
+
   const productCategory = product.category
   const relatedProducts = await Product.find({
     category: productCategory,
@@ -103,7 +107,8 @@ const getProduct = async (req, res) => {
 
   res.status(200).json({
     status: true,
-    product: product,
+    product,
+    reviews,
     relatedProducts: relatedProducts,
   })
 }
@@ -263,9 +268,8 @@ const bestSeller = async (req, res) => {
   res.status(200).json({ status: true, bestSeller: bestSeller })
 }
 
-
-const fiveRandomProducts = async(req, res) => {
-  try{
+const fiveRandomProducts = async (req, res) => {
+  try {
     const limit = 5
     const productObj = await Product.find({})
     const page = helper.randomPages(productObj, limit)
@@ -273,9 +277,14 @@ const fiveRandomProducts = async(req, res) => {
 
     const randomProducts = await Product.find({}).skip(skip).limit(limit)
 
-    return res.status(200).json({ status: true, nbHits: randomProducts.length, products: randomProducts })
-  }
-  catch(err){
+    return res
+      .status(200)
+      .json({
+        status: true,
+        nbHits: randomProducts.length,
+        products: randomProducts,
+      })
+  } catch (err) {
     return res.status(400).json({ status: false, error: err })
   }
 }
@@ -291,5 +300,5 @@ module.exports = {
   latestProduct,
   bestSelling,
   bestSeller,
-  fiveRandomProducts
+  fiveRandomProducts,
 }
