@@ -64,18 +64,14 @@ const getAllProducts = async (req, res) => {
 
 
 const getAllProductsByRating = async (req, res) => {
-  try {
-    const rating = req.query.rating
+  const rating = req.query.rating
 
-    const products = await Product.find({ rating: rating }).limit(10)
+  const products = await Product.find({ rating: rating }).limit(10)
 
-    if (products.length === 0) {
-      return res.status(404).json({ status: false, msg: 'No products found!' })
-    }
-    return res.status(200).json({ nbHits: products.length, products: products })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
+  if (products.length === 0) {
+    return res.status(404).json({ status: false, msg: 'No products found!' })
   }
+  return res.status(200).json({ nbHits: products.length, products: products })
 }
 
 
@@ -255,24 +251,18 @@ const bestSeller = async (req, res) => {
 }
 
 const fiveRandomProducts = async (req, res) => {
-  try {
-    const limit = 5
-    const productObj = await Product.find({})
-    const page = helper.randomPages(productObj, limit)
-    const skip = (page - 1) * limit
+  const limit = 5
+  const productObj = await Product.find({})
+  const page = helper.randomPages(productObj, limit)
+  const skip = (page - 1) * limit
 
-    const randomProducts = await Product.find({}).skip(skip).limit(limit)
+  const randomProducts = await Product.find({}).skip(skip).limit(limit)
 
-    return res
-      .status(200)
-      .json({
-        status: true,
-        nbHits: randomProducts.length,
-        products: randomProducts,
-      })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
-  }
+  return res.status(200).json({
+    status: true,
+    nbHits: randomProducts.length,
+    products: randomProducts,
+  })
 }
 
 const fiveCategoriesAndProduct = async (req, res) => {

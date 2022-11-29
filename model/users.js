@@ -30,6 +30,10 @@ const UserSchema = new Schema(
       unique: true,
       required: true,
     },
+    email_confirmed: {
+      type: Boolean,
+      default: false
+    },
     phonenumber: {
       type: String,
       default: '',
