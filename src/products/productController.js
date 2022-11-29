@@ -6,15 +6,7 @@ const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
 const createProduct = async (req, res) => {
-<<<<<<< HEAD
-  
-  /**
-   * create new product with required parameters
-   */
-  const productToSave = new Product({
-=======
   let productToSave = {
->>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
     name: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
@@ -53,9 +45,6 @@ const createProduct = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-<<<<<<< HEAD
-
-=======
   // NAME OF CATEGORY FIELD: VALUE
   // category_name: value => SINCE WE ARE QUERYING BASED ON THE CATEGORY NAME
 
@@ -73,24 +62,16 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
-<<<<<<< HEAD
-const getAllProductsByRating = async (req,res) => {
->>>>>>> 9269dfe3035a0523937cb27d9a7207d231fe47df
-=======
+
 const getAllProductsByRating = async (req, res) => {
->>>>>>> 584e2588a411e016c04bd473a7111cb21cf1caf5
-  try {
-    const rating = req.query.rating
+  const rating = req.query.rating
 
-    const products = await Product.find({ rating: rating }).limit(10)
+  const products = await Product.find({ rating: rating }).limit(10)
 
-    if (products.length === 0) {
-      return res.status(404).json({ status: false, msg: 'No products found!' })
-    }
-    return res.status(200).json({ nbHits: products.length, products: products })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
+  if (products.length === 0) {
+    return res.status(404).json({ status: false, msg: 'No products found!' })
   }
+  return res.status(200).json({ nbHits: products.length, products: products })
 }
 
 const getProduct = async (req, res) => {
@@ -269,24 +250,18 @@ const bestSeller = async (req, res) => {
 }
 
 const fiveRandomProducts = async (req, res) => {
-  try {
-    const limit = 5
-    const productObj = await Product.find({})
-    const page = helper.randomPages(productObj, limit)
-    const skip = (page - 1) * limit
+  const limit = 5
+  const productObj = await Product.find({})
+  const page = helper.randomPages(productObj, limit)
+  const skip = (page - 1) * limit
 
-    const randomProducts = await Product.find({}).skip(skip).limit(limit)
+  const randomProducts = await Product.find({}).skip(skip).limit(limit)
 
-    return res
-      .status(200)
-      .json({
-        status: true,
-        nbHits: randomProducts.length,
-        products: randomProducts,
-      })
-  } catch (err) {
-    return res.status(400).json({ status: false, error: err })
-  }
+  return res.status(200).json({
+    status: true,
+    nbHits: randomProducts.length,
+    products: randomProducts,
+  })
 }
 
 module.exports = {
