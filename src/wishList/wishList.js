@@ -2,6 +2,7 @@ const express = require('express')
 
 const WishListRoute = express.Router()
 const authenticate = require('../../middleware/authenticate')
+const { paramIsValidId } = require('../../middleware/reqParamValidation')
 // const wishList = require('../../model/wishList')
 
 // productRoute.use(passport.authenticate('jwt', { session: false }))
@@ -17,11 +18,13 @@ WishListRoute.route('/')
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     next()
-  })
+  }, authenticate.verifyUser)
 
-  .post(authenticate.verifyUser, CreateWishList)
+  .post(CreateWishList)
   .get(getWishLists)
 
-WishListRoute.route('/:id').delete(deleteWishList)
+WishListRoute.route('/:id')
+  .all(paramIsValidId)
+  .delete(deleteWishList)
 
 module.exports = WishListRoute

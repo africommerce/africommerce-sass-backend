@@ -30,7 +30,7 @@ const UserSchema = new Schema(
       unique: true,
       required: true,
     },
-    email_confirmed: {
+    email_is_confirmed: {
       type: Boolean,
       default: false
     },
