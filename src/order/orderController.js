@@ -10,7 +10,7 @@ async function createOrder(req, res) {
       msg: 'product to order not found!',
     })
   }
-  product_owner = product_owner.populate('owner_id', 'id')
+  product_owner = await product_owner.populate('owner_id', 'id')
   if (!product_owner) {
     return res.status(404).json({
       msg: 'Product not found!',
@@ -22,7 +22,11 @@ async function createOrder(req, res) {
     product,
     product_owner
   })
-  console.log(newOrder)
+  await newOrder.save()
+  res.status(201).json({
+    msg: 'order created!',
+    newOrder
+  })
 }
 
 module.exports = {
