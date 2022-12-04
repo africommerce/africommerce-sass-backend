@@ -1,5 +1,6 @@
 const express = require('express')
 const { paramIsValidId } = require('../../middleware/reqParamValidation')
+const authenticate = require('../../middleware/authenticate')
 
 const brandController = require('./brandController')
 const brandRoute = express.Router()
@@ -7,7 +8,7 @@ const brandRoute = express.Router()
 brandRoute
   .route('/')
   .get(brandController.getAllBrand)
-  .post(brandController.createBrand)
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, brandController.createBrand)
 
 brandRoute
   .route('/:id')
