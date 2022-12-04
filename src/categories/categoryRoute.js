@@ -8,6 +8,10 @@ categoryRoute
   .get(categoryController.fiveRandomCategories)
 
 categoryRoute
+  .route('/random-categories')
+  .get(categoryController.sixRandomCategories)
+
+categoryRoute
   .route('/')
   .post(categoryController.createCategory)
   .get(categoryController.getAllCategories)

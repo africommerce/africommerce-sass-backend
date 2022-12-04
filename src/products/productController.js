@@ -62,6 +62,7 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
+
 const getAllProductsByRating = async (req, res) => {
   const rating = req.query.rating
 

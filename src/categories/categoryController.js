@@ -1,7 +1,7 @@
 const Category = require('../../model/categories')
 const random = require('./utils/random')
 
-exports.createCategory = async (req, res) => {
+const createCategory = async (req, res) => {
   try {
     const newCategory = req.body.name
 
@@ -18,7 +18,7 @@ exports.createCategory = async (req, res) => {
   }
 }
 
-exports.getAllCategories = async (req, res) => {
+const getAllCategories = async (req, res) => {
   try {
     const allCategories = await Category.aggregate([
       {
@@ -40,7 +40,7 @@ exports.getAllCategories = async (req, res) => {
   }
 }
 
-exports.fiveRandomCategories = async (req, res) => {
+const fiveRandomCategories = async (req, res) => {
   try {
     const limit = 5
     const categoryObj = await Category.find({})
@@ -53,4 +53,23 @@ exports.fiveRandomCategories = async (req, res) => {
   } catch (err) {
     return res.status(400).json({ status: false, error: err })
   }
+}
+
+const sixRandomCategories = async(req, res) => {
+  const categories = await Category.aggregate([
+    {
+      $sample: { size: 6 }
+    }
+  ])
+  return res.status(200).json({
+    status: true,
+    categories
+  })
+}
+
+module.exports = {
+  createCategory,
+  getAllCategories,
+  fiveRandomCategories,
+  sixRandomCategories
 }
