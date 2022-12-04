@@ -20,15 +20,29 @@ async function createOrder(req, res) {
   const newOrder = new Order({
     user,
     product,
-    product_owner
+    product_owner,
   })
   await newOrder.save()
   res.status(201).json({
     msg: 'order created!',
-    newOrder
+    newOrder,
+  })
+}
+
+async function getOrder(req, res) {
+  const order = await Order.findById(req.params.id)
+  if (!order) {
+    return res.status(404).json({
+      msg: 'Order not found!',
+    })
+  }
+  res.json({
+    status: true,
+    order,
   })
 }
 
 module.exports = {
   createOrder,
+  getOrder
 }
