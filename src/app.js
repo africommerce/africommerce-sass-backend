@@ -4,6 +4,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const passport = require('passport')
+const cors = require('cors')
 
 const indexRouter = require('../routes/index')
 const bodyParser = require('body-parser')
@@ -24,6 +25,12 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.use(passport.initialize())
+
+const allowedOrigins = ['http://localhost:3000', 'https://africommerce-saas.vercel.app/']
+
+app.use(cors({
+  origin: allowedOrigins
+}))
 
 app.use('/', indexRouter)
 
