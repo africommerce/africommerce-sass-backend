@@ -62,6 +62,7 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
+
 const getAllProductsByRating = async (req, res) => {
   const rating = req.query.rating
 
@@ -72,6 +73,7 @@ const getAllProductsByRating = async (req, res) => {
   }
   return res.status(200).json({ nbHits: products.length, products: products })
 }
+
 
 const getProduct = async (req, res) => {
   const { id: productID } = req.params
@@ -263,6 +265,20 @@ const fiveRandomProducts = async (req, res) => {
   })
 }
 
+const fiveCategoriesAndProduct = async (req, res) => {
+
+  const CategoriesAndProduct = await Product.find({
+    $sample: { size: 5 }
+  })
+    .select('-_id -__v -createdAt -updatedAt')
+    .populate('category', '-_id -__v')
+  return res.status(200).json({
+    status: true,
+    CategoriesAndProduct
+  })
+}
+
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -275,4 +291,5 @@ module.exports = {
   bestSelling,
   bestSeller,
   fiveRandomProducts,
+  fiveCategoriesAndProduct
 }

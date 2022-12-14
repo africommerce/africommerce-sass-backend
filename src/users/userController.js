@@ -72,11 +72,12 @@ async function getOneUser(req, res) {
 
 async function updateUserById(req, res) {
   const id = req.params.id
-  const { firstname, lastname, email, username } = req.body
+  // const { firstname, lastname, email, username } = req.body
 
   let user = await userModel.findByIdAndUpdate(
     id,
-    { firstname, lastname, email, username },
+    // { firstname, lastname, email, username },
+    req.body,
     { new: true }
   )
 

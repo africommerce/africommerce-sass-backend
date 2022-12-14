@@ -16,7 +16,8 @@ const {
   latestProduct,
   bestSelling,
   bestSeller,
-  fiveRandomProducts
+  fiveRandomProducts,
+  fiveCategoriesAndProduct
 } = require('./productController')
 
 
@@ -48,6 +49,7 @@ productRoute.route('/latest-products').get(latestProduct)
 productRoute.route('/best-selling').get(bestSelling)
 
 productRoute.route('/best-sellers').get(bestSeller)
+productRoute.route('/five-product-category').get(fiveCategoriesAndProduct)
 
 
 
@@ -56,9 +58,11 @@ productRoute
   .get(fiveRandomProducts)
 
 
+
 productRoute
   .route('/:id')
   .put(paramIsValidId, updateProduct)
   .get(paramIsValidId, getProduct)
   .delete(paramIsValidId, deleteProduct)
+
 module.exports = productRoute

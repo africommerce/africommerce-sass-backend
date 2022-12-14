@@ -1,6 +1,7 @@
 const Brand = require('../../model/brand')
 const helper = require('./utils/helper')
 
+
 const createBrand = async (req, res) => {
   const brandName = req.body.name
   const brand = await Brand.create({
@@ -58,5 +59,5 @@ module.exports = {
   createBrand,
   getAllBrand,
   updateBrand,
-  deleteBrand,
+  deleteBrand
 }
