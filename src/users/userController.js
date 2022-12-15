@@ -25,6 +25,17 @@ async function createUser(req, res) {
     phonenumber,
   })
 
+  /*Handling Email verification*/
+  const verificationToken = userModel.createEmailVerificationToken()
+  await userModel.save({ validateBeforeSave: false })
+
+  try{
+    /* creating verification link */
+    const link = `${req.protocol}://${req.get('host')}/users/verify?${verificationToken}`
+  }
+  catch(err){
+    return
+  }
   user.password = undefined
   res.json({
     msg: 'Registration successful!',
