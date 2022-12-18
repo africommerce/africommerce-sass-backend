@@ -17,7 +17,7 @@ const statusResponse = async (req, res, user) => {
   user.emailVerificationExpires = undefined
 
   /*Handles sending out MAILS only in PRODUCTION*/
-  if (process.env.NODE_ENV==='production'){
+  if (process.env.NODE_ENV!=='development'){
     try {
 
       /* creating verification link */
