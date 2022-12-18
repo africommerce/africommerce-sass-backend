@@ -1,4 +1,8 @@
-const message = `
+const sendEmail = require('../sendEmail')
+require('dotenv').config()
+
+const emailVerification = async ({ name, email, url }) => {
+  const message = `
     <div style="display: flex; justify-content: center">
     
         <div style="border: 1px solid #555;border-radius: 5px;padding: 2vw 5vw 0.5em 5vw;color: #555;width: 80%;">
@@ -56,3 +60,12 @@ const message = `
             <hr />
             <small>&copy; 2022 tflowersandfabrics.com</small>
           </div></div>`
+  return sendEmail({
+    from: `Africommerce Online Market <${process.env.MAIL_USER}>`,
+    to: email,
+    subject: 'Email Verification',
+    html: message
+  })
+}
+
+module.exports = emailVerification
