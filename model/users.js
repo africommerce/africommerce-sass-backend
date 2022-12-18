@@ -1,7 +1,6 @@
 // importing the mongoose database ORM
 const mongoose = require('mongoose')
 const argon2 = require('argon2')
-const crypto = require('crypto')
 
 const Schema = mongoose.Schema
 
@@ -109,17 +108,6 @@ UserSchema.pre('save', async function () {
   this.password = hash
 })
 
-UserSchema.methods.createEmailVerificationToken = function(){
-  const verificationToken = crypto.randomBytes(32).toString('hex')
-
-  this.emailVerificationToken = crypto
-    .createHash('sha256')
-    .update(verificationToken)
-    .digest('hex')
-  this.emailVerificationExpires = Date.now() + 3 * 24 * 60 * 60 * 1000
-
-  return verificationToken
-}
 
 const businessModel = mongoose.model('Business', businessUser)
 const userModel = mongoose.model('User', UserSchema)
