@@ -3,13 +3,17 @@ const { userModel } = require('../../model/users')
 const { hashPassword, validateUser } = require('../../config/helper')
 
 const authenticate = require('../../middleware/authenticate')
+//const verificationMail = require('./utils/Emails/emailVerification')
+const { emailVerificationToken, emailVerificationExpires, statusResponse } = require('./utils/Token')
 
 async function createUser(req, res) {
   const { firstname, lastname, username, email, password, phonenumber } =
     req.body
+
   let userExist =
     (await userModel.findOne({ username: username })) ||
     (await userModel.findOne({ email: email }))
+
   if (userExist) {
     return res
       .status(409)
@@ -23,13 +27,12 @@ async function createUser(req, res) {
     email,
     password,
     phonenumber,
+    emailVerificationToken: emailVerificationToken,
+    emailVerificationExpires: emailVerificationExpires,
   })
 
-  user.password = undefined
-  res.json({
-    msg: 'Registration successful!',
-    user,
-  })
+  statusResponse(req, res, user)
+
 }
 
 const loginUser = async (req, res) => {

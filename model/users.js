@@ -1,6 +1,7 @@
 // importing the mongoose database ORM
 const mongoose = require('mongoose')
 const argon2 = require('argon2')
+
 const Schema = mongoose.Schema
 
 // modelling the User schema
@@ -52,6 +53,12 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    emailVerificationToken: String,
+    emailVerificationExpires: String,
+    isVerified: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true,
@@ -100,6 +107,7 @@ UserSchema.pre('save', async function () {
 
   this.password = hash
 })
+
 
 const businessModel = mongoose.model('Business', businessUser)
 const userModel = mongoose.model('User', UserSchema)
