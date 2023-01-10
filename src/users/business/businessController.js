@@ -3,8 +3,8 @@ const { userModel, businessModel } = require('../../../model/users')
 async function registerBusinessUser(req, res) {
   const { business_name, address, logo } = req.body
   const userId = req.user.id
-  const userIsBusiness =
-    (await userModel.findById(userId).usertype) === 'business'
+  const { usertype } = await userModel.findById(userId)
+  const userIsBusiness = usertype === 'business'
   if (userIsBusiness) {
     return res.status(400).send('You are a business user already!')
   }
