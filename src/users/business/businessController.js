@@ -45,15 +45,17 @@ async function getAllBusinessUser(req, res) {
 }
 
 async function updateBusinessInfo(req, res) {
-  const user = await businessModel.findByIdAndUpdate(req.params.id, {
-    extra: 'i\'m just adding an extra write up and nothing more!',
+  const business = await businessModel.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    context: 'query',
   })
-  if (!user) {
-    return res.status(404).send('This user does not exist!')
+  if (!business) {
+    return res.status(404).send('This business does not exist!')
   }
   res.status(200).json({
     msg: 'successful!',
-    data: user,
+    data: business,
   })
 }
 

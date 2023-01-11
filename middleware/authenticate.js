@@ -1,5 +1,5 @@
 const passport = require('passport')
-const { userModel } = require('../model/users')
+const { userModel, businessModel } = require('../model/users')
 const Product = require('../model/products')
 const JwtStrategy = require('passport-jwt').Strategy
 const jwt = require('jsonwebtoken')
@@ -72,6 +72,21 @@ exports.verifyAuthor = async (req, res, next) => {
   if (userRequesting === productOwner) {
     next()
   } else {
-    res.status(403).json({ msg: 'You are not authorised to update this blog' })
+    res.status(403).json({ msg: 'You are not authorised to update this product' })
   }
+}
+
+exports.verifyBusinessOwner = async (req, res, next) => {
+  const business = await businessModel.findById(req.params.id)
+  if (!business) {
+    return res.status(404).json({
+      msg: 'This business does not exist!',
+    })
+  }
+  const access = business.owner[0].toString() === req.user._id.toString() ? true : false
+  if (access) return next()
+
+  return res.status(403).json({
+    msg: 'You are not authorised to update this business',
+  })
 }
