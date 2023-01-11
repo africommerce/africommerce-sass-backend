@@ -7,7 +7,7 @@ function validateProduct() {
     body('product_details').optional().isString(),
     body('category').notEmpty().isString(),
     body('quantity').notEmpty().isInt(),
-    body('price').notEmpty().isInt(),
+    body('price').notEmpty().isFloat(),
     body('desc').notEmpty().isString(),
     body('warranty').optional().isString(),
     body('rating').optional().isInt({ max: 5, min: 1 }),

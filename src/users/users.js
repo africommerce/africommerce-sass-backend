@@ -34,6 +34,6 @@ router
   .route('/update_password')
   .put(authenticate.verifyUser, updateUserPassword)
 
-router.route(paramIsValidId, '/:id').put(updateUserById).get(getOneUser).delete(deleteUserById)
+router.route('/:id').all(paramIsValidId).put(updateUserById).get(getOneUser).delete(deleteUserById)
 
 module.exports = router

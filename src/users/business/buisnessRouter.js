@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const authenticate = require('../../../middleware/authenticate')
+const { paramIsValidId } = require('../../../middleware/reqParamValidation')
 
 const {
   registerBusinessUser,
@@ -16,6 +17,6 @@ router.route('/:id').get(getBusinessUserInfo)
 
 router
   .route('/:id')
-  .put(authenticate.verifyUser, authenticate.verifyAuthor, updateBusinessInfo)
+  .put(paramIsValidId, authenticate.verifyUser, authenticate.verifyBusinessOwner, updateBusinessInfo)
 
 module.exports = router
