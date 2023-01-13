@@ -38,7 +38,7 @@ const createProduct = async (req, res) => {
   }
 
   const product = await Product.create(productToSave)
-  res.status(200).json({
+  res.status(201).json({
     msg: 'Product created successfully!',
     product,
   })
