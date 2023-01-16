@@ -1,11 +1,10 @@
-const businessModel = require('../../model/buiness')
-const userModel = require('../../model/users')
+const { userModel, businessModel } = require('../../model/users')
 
 async function registerBusinessUser(req, res) {
   const { business_name, address, logo } = req.body
   const userId = req.user.id
-  const userIsBusiness =
-    (await userModel.findById(userId).usertype) === 'business'
+  const { usertype } = await userModel.findById(userId)
+  const userIsBusiness = usertype === 'business'
   if (userIsBusiness) {
     return res.status(400).send('You are a business user already!')
   }
@@ -39,25 +38,24 @@ async function getBusinessUserInfo(req, res) {
 
 async function getAllBusinessUser(req, res) {
   const user = await businessModel.find({}).populate('owner')
-  if(!user){
-    return res.status(404).send('User not found!')
-  }
   res.json({
     status: 200,
-    data: user
+    data: user,
   })
 }
 
 async function updateBusinessInfo(req, res) {
-  const user = await businessModel.findByIdAndUpdate(req.params.id, {
-    extra: 'i\'m just adding an extra write up and nothing more!',
+  const business = await businessModel.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    context: 'query',
   })
-  if (!user) {
-    return res.status(404).send('This user does not exist!')
+  if (!business) {
+    return res.status(404).send('This business does not exist!')
   }
   res.status(200).json({
     msg: 'successful!',
-    data: user,
+    data: business,
   })
 }
 

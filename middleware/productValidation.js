@@ -15,20 +15,29 @@ function validateProduct() {
   ]
 }
 
+function validateOrder() {
+  return [
+    body('productId').notEmpty().isString(),
+    body('quantity').notEmpty().isNumeric(),
+  ]
+}
+
 function validate(req, res, next) {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     return next()
   }
-  const extractedErrors = []
-  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }))
+  // const extractedErrors = []
+  const { msg, param } = errors.array()[0]
+  // .map((err) => extractedErrors.push({ [err.param]: err.msg }))
 
   return res.status(422).json({
-    errors: extractedErrors,
+    errors: `${param} ${msg}`,
   })
 }
 
 module.exports = {
   validateProduct,
+  validateOrder,
   validate,
 }

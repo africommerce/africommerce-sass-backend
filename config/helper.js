@@ -2,7 +2,7 @@ const argon2 = require('argon2')
 // const jwt = require('jsonwebtoken')
 // const config = require('./config')
 
-const { userModel } = require('../model/users')
+const userModel = require('../model/users')
 
 async function hashPassword(password) {
   return await argon2.hash(password)

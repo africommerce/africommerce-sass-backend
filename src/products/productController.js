@@ -1,5 +1,5 @@
 const Product = require('../../model/products')
-const Review = require('../../model/review')
+// const Review = require('../../model/review')
 const Category = require('../../model/categories')
 const { userModel } = require('../../model/users')
 const brandModel = require('../../model/brand')
@@ -62,7 +62,6 @@ const getAllProducts = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
-
 const getAllProductsByRating = async (req, res) => {
   const rating = req.query.rating
 
@@ -74,33 +73,37 @@ const getAllProductsByRating = async (req, res) => {
   return res.status(200).json({ nbHits: products.length, products: products })
 }
 
-
 const getProduct = async (req, res) => {
   const { id: productID } = req.params
   const product = await Product.findOne({ id: productID })
 
-  const reviews = await Review.find({ product: productID })
+  // const reviews = await Review.find({ product: productID })
 
-  const productCategory = product.category
-  const relatedProducts = await Product.find({
-    category: productCategory,
-    _id: { $ne: productID },
-  }).limit(10)
+  // const productCategory = product.category
+  // const relatedProducts = await Product.find({
+  //   category: productCategory,
+  //   _id: { $ne: productID },
+  // }).limit(10)
 
   res.status(200).json({
     status: true,
     product,
-    reviews,
-    relatedProducts: relatedProducts,
+    // reviews,
+    // relatedProducts: relatedProducts,
   })
 }
 
 const updateProduct = async (req, res) => {
   const productID = req.params.id
   // const { name, price, quantity, desc } = req.body
-  const product = await Product.findByIdAndUpdate(productID, req.body, {
-    new: true,
-  })
+  const data = req.body
+  const product = await Product.findByIdAndUpdate(
+    productID,
+    data,
+    {
+      new: true,
+    }
+  )
   if (!product) {
     return res.status(404).send('Product to update not found!')
   }
@@ -266,18 +269,16 @@ const fiveRandomProducts = async (req, res) => {
 }
 
 const fiveCategoriesAndProduct = async (req, res) => {
-
   const CategoriesAndProduct = await Product.find({
-    $sample: { size: 5 }
+    $sample: { size: 5 },
   })
     .select('-_id -__v -createdAt -updatedAt')
     .populate('category', '-_id -__v')
   return res.status(200).json({
     status: true,
-    CategoriesAndProduct
+    CategoriesAndProduct,
   })
 }
-
 
 module.exports = {
   createProduct,
@@ -291,5 +292,5 @@ module.exports = {
   bestSelling,
   bestSeller,
   fiveRandomProducts,
-  fiveCategoriesAndProduct
+  fiveCategoriesAndProduct,
 }
