@@ -1,5 +1,6 @@
 const passport = require('passport')
-const { userModel, businessModel } = require('../model/users')
+const userModel = require('../model/users')
+const businessModel = require('../model/buiness')
 const Product = require('../model/products')
 const JwtStrategy = require('passport-jwt').Strategy
 const jwt = require('jsonwebtoken')

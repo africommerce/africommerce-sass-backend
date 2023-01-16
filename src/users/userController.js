@@ -1,9 +1,9 @@
-const { userModel } = require('../../model/users')
+const userModel = require('../../model/users')
 // const passport = require('passport')
 const { hashPassword, validateUser } = require('../../config/helper')
 
 const authenticate = require('../../middleware/authenticate')
-//const verificationMail = require('./utils/Emails/emailVerification')
+// const verificationMail = require('./utils/Emails/emailVerification')
 const { emailVerificationToken, emailVerificationExpires, statusResponse } = require('./utils/Token')
 
 async function createUser(req, res) {
@@ -45,6 +45,7 @@ const loginUser = async (req, res) => {
   res.setHeader('Content-Type', 'application/json')
   res.cookie('jwt_token', token, { httpOnly: true }).status(200).json({
     msg: 'Login successful',
+    token
   })
 }
 
