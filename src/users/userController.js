@@ -1,4 +1,4 @@
-const { userModel } = require('../../model/users')
+const userModel = require('../../model/users')
 // const passport = require('passport')
 const { hashPassword, validateUser } = require('../../config/helper')
 

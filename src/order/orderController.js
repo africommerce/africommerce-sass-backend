@@ -39,17 +39,17 @@ async function createOrder(req, res) {
 
 async function getUserOrders(req, res) {
   const user = req.user.id
-  const orders = await Order.find({ user })
+  const orders = await Order.find({ user }).populate('product').populate('user')
   if (orders.length === 0) {
     return res.json({
       msg: 'You do not have any order yet, you can create one!',
     })
   }
-  res.json({ msg: 'Here are you orders' })
+  res.json({ msg: 'Here are you orders' , orders })
 }
 
 async function getOrder(req, res) {
-  const order = await Order.findById(req.params.id)
+  const order = await Order.findById(req.params.id).populate('product')
   if (!order) {
     return res.status(404).json({
       msg: 'Order not found!',
