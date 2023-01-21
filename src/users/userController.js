@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
   res.setHeader('Content-Type', 'application/json')
   res.cookie('jwt_token', token, { httpOnly: true }).status(200).json({
     msg: 'Login successful',
-    token
+    data: token
   })
 }
 
@@ -71,7 +71,10 @@ async function getOneUser(req, res) {
   if (!user) {
     return res.status(404).send('User with this id does not exist!')
   }
-  res.status(200).send(user)
+  res.status(200).json({
+    msg: 'requested user',
+    data: user,
+  })
 }
 
 async function updateUserById(req, res) {
@@ -137,7 +140,7 @@ async function getSellers(req, res) {
       },
     },
   ])
-  res.status(200).json({ status: true, sellers: sellers })
+  res.status(200).json({ status: true, data: sellers })
 }
 
 async function getSellerById(req, res) {
@@ -149,7 +152,7 @@ async function getSellerById(req, res) {
 
   res.status(200).json({
     status: true,
-    seller: seller,
+    data: seller,
   })
 }
 

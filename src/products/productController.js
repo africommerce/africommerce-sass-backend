@@ -40,7 +40,7 @@ const createProduct = async (req, res) => {
   const product = await Product.create(productToSave)
   res.status(201).json({
     msg: 'Product created successfully!',
-    product,
+    data: product,
   })
 }
 
@@ -59,7 +59,7 @@ const getAllProducts = async (req, res) => {
     .skip(paginate.skip)
     .limit(paginate.limit)
 
-  return res.status(200).json({ nbHits: products.length, products })
+  return res.status(200).json({ nbHits: products.length, data: products })
 }
 
 const getAllProductsByRating = async (req, res) => {
@@ -70,7 +70,7 @@ const getAllProductsByRating = async (req, res) => {
   if (products.length === 0) {
     return res.status(404).json({ status: false, msg: 'No products found!' })
   }
-  return res.status(200).json({ nbHits: products.length, products })
+  return res.status(200).json({ nbHits: products.length, data: products })
 }
 
 const getProduct = async (req, res) => {
@@ -82,7 +82,7 @@ const getProduct = async (req, res) => {
 
   res.status(200).json({
     status: true,
-    product,
+    data: product,
   })
 }
 
@@ -96,7 +96,7 @@ const updateProduct = async (req, res) => {
   if (!product) {
     return res.status(404).send('Product to update not found!')
   }
-  res.status(200).json({ msg: 'product updated successfully', product })
+  res.status(200).json({ msg: 'product updated successfully', data: product })
 }
 
 const deleteProduct = async (req, res) => {
@@ -157,7 +157,7 @@ const TopProducts = async (req, res) => {
 
   return res.status(200).json({
     status: true,
-    products,
+    data: products,
   })
 }
 
@@ -166,7 +166,7 @@ const latestProduct = async (req, res) => {
   const latestProducts = await Product.find({})
     .sort({ createdAt: 'desc' })
     .limit(10)
-  res.status(200).json({ status: true, latestProducts: latestProducts })
+  res.status(200).json({ status: true, data: latestProducts })
 }
 
 const bestSelling = async (req, res) => {
@@ -177,7 +177,7 @@ const bestSelling = async (req, res) => {
 
   res.status(200).json({
     status: true,
-    bestSellingProducts: bestSellingProduct,
+    data: bestSellingProduct,
   })
 }
 
@@ -239,7 +239,7 @@ const bestSeller = async (req, res) => {
     },
   ])
 
-  res.status(200).json({ status: true, bestSeller: bestSeller })
+  res.status(200).json({ status: true, data: bestSeller })
 }
 
 const fiveRandomProducts = async (req, res) => {
@@ -253,7 +253,7 @@ const fiveRandomProducts = async (req, res) => {
   return res.status(200).json({
     status: true,
     nbHits: randomProducts.length,
-    products: randomProducts,
+    data: randomProducts,
   })
 }
 
@@ -265,7 +265,7 @@ const fiveCategoriesAndProduct = async (req, res) => {
     .populate('category', '-_id -__v')
   return res.status(200).json({
     status: true,
-    CategoriesAndProduct,
+    data: CategoriesAndProduct,
   })
 }
 
