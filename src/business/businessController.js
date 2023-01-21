@@ -1,4 +1,6 @@
-const { userModel, businessModel } = require('../../model/users')
+const businessModel = require('../../model/buiness')
+const userModel = require('../../model/users')
+
 
 async function registerBusinessUser(req, res) {
   const { business_name, address, logo } = req.body

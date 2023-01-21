@@ -59,7 +59,7 @@ const getAllProducts = async (req, res) => {
     .skip(paginate.skip)
     .limit(paginate.limit)
 
-  return res.status(200).json({ nbHits: products.length, products: products })
+  return res.status(200).json({ nbHits: products.length, products })
 }
 
 const getAllProductsByRating = async (req, res) => {
@@ -70,26 +70,19 @@ const getAllProductsByRating = async (req, res) => {
   if (products.length === 0) {
     return res.status(404).json({ status: false, msg: 'No products found!' })
   }
-  return res.status(200).json({ nbHits: products.length, products: products })
+  return res.status(200).json({ nbHits: products.length, products })
 }
 
 const getProduct = async (req, res) => {
-  const { id: productID } = req.params
-  const product = await Product.findOne({ id: productID })
-
-  // const reviews = await Review.find({ product: productID })
-
-  // const productCategory = product.category
-  // const relatedProducts = await Product.find({
-  //   category: productCategory,
-  //   _id: { $ne: productID },
-  // }).limit(10)
+  const { id } = req.params
+  const product = await Product.findById(id)
+    .populate('brand')
+    .populate('category')
+    .populate('owner_id')
 
   res.status(200).json({
     status: true,
     product,
-    // reviews,
-    // relatedProducts: relatedProducts,
   })
 }
 
@@ -97,13 +90,9 @@ const updateProduct = async (req, res) => {
   const productID = req.params.id
   // const { name, price, quantity, desc } = req.body
   const data = req.body
-  const product = await Product.findByIdAndUpdate(
-    productID,
-    data,
-    {
-      new: true,
-    }
-  )
+  const product = await Product.findByIdAndUpdate(productID, data, {
+    new: true,
+  })
   if (!product) {
     return res.status(404).send('Product to update not found!')
   }
