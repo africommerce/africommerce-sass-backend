@@ -9,7 +9,7 @@ const createBrand = async (req, res) => {
   })
   res.status(200).json({
     status: true,
-    brand,
+    data: brand,
   })
 }
 
@@ -27,7 +27,7 @@ const getAllBrand = async (req, res) => {
 
   res.status(200).json({
     status: true,
-    brand: allBrand,
+    data: allBrand,
   })
 }
 
@@ -41,7 +41,7 @@ const updateBrand = async (req, res) => {
   }
   res.status(200).json({
     msg: 'Brand updated successfully',
-    brand,
+    data: brand,
   })
 }
 

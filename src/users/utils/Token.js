@@ -33,7 +33,7 @@ const statusResponse = async (req, res, user) => {
 
       return res.status(200).json({
         msg: 'Registration successful, please check your email!',
-        user,
+        data: user,
       })
     } catch (err) {
       (user.emailVerificationToken = undefined),
@@ -50,7 +50,7 @@ const statusResponse = async (req, res, user) => {
   else{
     return res.status(200).json({
       msg: 'Registration successful!',
-      user,
+      data: user,
     })
   }
 

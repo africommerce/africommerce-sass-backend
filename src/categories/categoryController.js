@@ -11,7 +11,7 @@ const createCategory = async (req, res) => {
 
     return res.status(201).json({
       status: true,
-      category: savedCategory,
+      data: savedCategory,
     })
   } catch (err) {
     return res.status(400).json({ status: false, error: err })
@@ -30,7 +30,7 @@ const getAllCategories = async (req, res) => {
 
     res.status(200).json({
       status: true,
-      categories: allCategories,
+      data: allCategories,
     })
   } catch (err) {
     res.status(400).json({
@@ -49,7 +49,7 @@ const fiveRandomCategories = async (req, res) => {
 
     const randomCategories = await Category.find({}).skip(skip).limit(limit)
 
-    return res.status(200).json({ status: true, categories: randomCategories })
+    return res.status(200).json({ status: true, data: randomCategories })
   } catch (err) {
     return res.status(400).json({ status: false, error: err })
   }

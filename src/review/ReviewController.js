@@ -34,14 +34,15 @@ const CreateReview = async (req, res) => {
   await product.save()
   res.status(200).json({
     msg: 'Review created successfully!',
-    review,
+    data: review,
   })
 }
 
 const getAllReview = async (req, res) => {
   const reviews = await Review.find()
   res.json({
-    reviews,
+    msg: 'Successful',
+    data: reviews,
   })
 }
 
@@ -51,7 +52,8 @@ const getReview = async (req, res) => {
     return res.status(404).send('Review with this id not found!')
   }
   res.json({
-    review,
+    msg: 'Successful',
+    data: review,
   })
 }
 
@@ -67,7 +69,7 @@ const updateReview = async (req, res) => {
   }
   res.json({
     msg: 'Review update successfully!',
-    review,
+    data: review,
   })
 }
 

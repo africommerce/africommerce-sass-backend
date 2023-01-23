@@ -22,7 +22,10 @@ async function registerBusinessUser(req, res) {
     { usertype: 'business' },
     { new: true }
   )
-  res.send(businessUser)
+  res.status(201).json({
+    msg: 'successful!',
+    data: businessUser,
+  })
 }
 
 async function getBusinessUserInfo(req, res) {

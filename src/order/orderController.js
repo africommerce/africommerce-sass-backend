@@ -33,7 +33,7 @@ async function createOrder(req, res) {
   })
   res.status(201).json({
     msg: 'order created!',
-    newOrder: newOrder,
+    data: newOrder,
   })
 }
 
@@ -57,7 +57,7 @@ async function getOrder(req, res) {
   }
   res.json({
     status: true,
-    order,
+    data: order,
   })
 }
 

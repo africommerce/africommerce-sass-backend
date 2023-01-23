@@ -35,7 +35,7 @@ const CreateWishList = async (req, res) => {
   }
   res.status(201).json({
     msg: 'Wishlist created!',
-    userExist
+    data: userExist
   })
 }
 
@@ -50,7 +50,7 @@ const getWishLists = async (req, res) => {
     })
   }
   res.status(200).json({
-    wishList,
+    data: wishList,
   })
 }
 
@@ -62,7 +62,7 @@ const deleteWishList = async (req, res) => {
     })
   }
 
-  res.status(200).json({ status: true, wishList })
+  res.status(200).json({ status: true, data: wishList })
 }
 
 module.exports = { CreateWishList, getWishLists, deleteWishList }
