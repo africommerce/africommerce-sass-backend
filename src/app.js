@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, '../public')))
 
 app.use(passport.initialize())
 
-const allowedOrigins = ['http://localhost:3000', 'https://africommerce-saas.vercel.app/']
+const allowedOrigins = ['http://localhost:3000', 'https://africommerce-saas.vercel.app']
 
 app.use(cors({
   origin: allowedOrigins
