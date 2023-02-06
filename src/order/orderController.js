@@ -45,7 +45,7 @@ async function getUserOrders(req, res) {
       msg: 'You do not have any order yet, you can create one!',
     })
   }
-  res.json({ msg: 'Here are you orders' , orders })
+  res.json({ msg: 'Here are you orders', data: orders })
 }
 
 async function getOrder(req, res) {

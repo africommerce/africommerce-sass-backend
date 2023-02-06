@@ -175,7 +175,7 @@ const bestSelling = async (req, res) => {
   })
 
   res.status(200).json({
-    products
+    data: products
   })
 }
 
@@ -263,7 +263,7 @@ const fiveCategoriesAndProduct = async (req, res) => {
     .populate('category', '-_id -__v')
   return res.status(200).json({
     status: true,
-    product,
+    data: product,
   })
 }
 
