@@ -1,7 +1,7 @@
 const Product = require('../../model/products')
 // const Review = require('../../model/review')
 const Category = require('../../model/categories')
-const { userModel } = require('../../model/users')
+const userModel = require('../../model/users')
 const brandModel = require('../../model/brand')
 const helper = require('./utils/helper')
 
@@ -100,8 +100,7 @@ const updateProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
-  const productID = req.params.id
-  const product = await Product.findOneAndDelete({ _id: productID })
+  const product = await Product.findByIdAndDelete(req.params.id)
   if (!product) {
     return res.status(404).send('Product with this id not found!')
   }
@@ -163,21 +162,20 @@ const TopProducts = async (req, res) => {
 
 const latestProduct = async (req, res) => {
   /*SORT PRODUCTS BY DATE */
-  const latestProducts = await Product.find({})
+  const products = await Product.find({})
     .sort({ createdAt: 'desc' })
     .limit(10)
-  res.status(200).json({ status: true, data: latestProducts })
+  res.status(200).json({ products })
 }
 
 const bestSelling = async (req, res) => {
   /* SORT PRODUCT BY MOST SOLD */
-  const bestSellingProduct = await Product.find({}).sort({
+  const products = await Product.find({}).sort({
     amount_sold: 'desc',
   })
 
   res.status(200).json({
-    status: true,
-    data: bestSellingProduct,
+    data: products
   })
 }
 
@@ -258,14 +256,14 @@ const fiveRandomProducts = async (req, res) => {
 }
 
 const fiveCategoriesAndProduct = async (req, res) => {
-  const CategoriesAndProduct = await Product.find({
+  const product = await Product.find({
     $sample: { size: 5 },
   })
     .select('-_id -__v -createdAt -updatedAt')
     .populate('category', '-_id -__v')
   return res.status(200).json({
     status: true,
-    data: CategoriesAndProduct,
+    data: product,
   })
 }
 
