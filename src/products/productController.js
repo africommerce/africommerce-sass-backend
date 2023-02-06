@@ -256,14 +256,14 @@ const fiveRandomProducts = async (req, res) => {
 }
 
 const fiveCategoriesAndProduct = async (req, res) => {
-  const CategoriesAndProduct = await Product.find({
+  const product = await Product.find({
     $sample: { size: 5 },
   })
     .select('-_id -__v -createdAt -updatedAt')
     .populate('category', '-_id -__v')
   return res.status(200).json({
     status: true,
-    data: CategoriesAndProduct,
+    product,
   })
 }
 
