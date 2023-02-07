@@ -7,7 +7,7 @@ const createBrand = async (req, res) => {
   const brand = await Brand.create({
     name: brandName,
   })
-  res.status(200).json({
+  res.status(201).json({
     status: true,
     data: brand,
   })
