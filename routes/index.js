@@ -21,9 +21,9 @@ rootRouter.use('/users', userRoute)
 rootRouter.use('/products', productRoute)
 rootRouter.use('/business', businessRouter)
 rootRouter.use('/categories', categoryRoute)
-rootRouter.use('/brand', brandRoute)
+rootRouter.use('/brands', brandRoute)
 rootRouter.use('/reviews', reviewRouter)
 rootRouter.use('/wishlist', wishlistRouter)
-rootRouter.use('/order', orderRouter)
+rootRouter.use('/orders', orderRouter)
 
 module.exports = rootRouter
