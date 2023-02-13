@@ -28,7 +28,7 @@ app.use(passport.initialize())
 
 // const allowedOrigins = ['http://localhost:3000', 'https://africommerce-saas.vercel.app']
 
-app.use(cors())
+app.use(cors({ origin: '*' }))
 
 app.use('/', indexRouter)
 
