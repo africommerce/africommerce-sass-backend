@@ -34,6 +34,9 @@ async function createUser(req, res) {
     emailVerificationToken: emailVerificationToken,
     emailVerificationExpires: emailVerificationExpires,
   })
+  user.password = undefined
+  user.emailVerificationExpires = undefined
+  user.emailVerificationToken = undefined
 
   res.status(201).json({
     msg: 'User Created succesfully!',
